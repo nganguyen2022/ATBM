@@ -122,7 +122,7 @@ public class Load {
 				ps.setString(2, pass);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
 				}
 			} catch (Exception e) {
 
@@ -140,7 +140,7 @@ public class Load {
 				ps.setString(1, uname);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
 				}
 			} catch (Exception e) {
 
@@ -149,14 +149,19 @@ public class Load {
 
 		}
 
-		public void register(String ruser, String rpass, String remail) {
-			String query = "INSERT INTO USERS VALUES(?, ?, ?, 1)";
+		public void register(String fullname, String username, String email, String phone, String address, String pass, String publicKey, String privateKey) {
+			String query = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, 1)";
 			try {
 				conn =new Connect().getconnecttion();
 				ps = conn.prepareStatement(query);
-				ps.setString(1, ruser);
-				ps.setString(2, rpass);
-				ps.setString(3, remail);
+				ps.setString(1, fullname);
+				ps.setString(2, username);
+				ps.setString(3, email);
+				ps.setString(4, phone);
+				ps.setString(5, address);
+				ps.setString(6, pass);
+				ps.setString(7, publicKey);
+				ps.setString(8, privateKey);
 				ps.executeUpdate();
 			} catch (Exception e) {
 

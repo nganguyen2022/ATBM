@@ -27,6 +27,24 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <style>
+        .form-check {
+            display: flex;
+            align-items: center; /* Align checkboxes vertically centered */
+            justify-content: space-between;
+            margin-bottom: 15px; /* Adjust the margin between the checkbox group and other elements */
+        }
+
+        .form-check-left,
+        .form-check-right {
+            display: flex;
+            align-items: center; /* Align checkboxes vertically centered */
+        }
+
+        .form-check-right {
+            margin-left: auto; /* Push the right checkbox to the right */
+        }
+    </style>
 </head>
 <body>
 <!-- Header Section Begin -->
@@ -43,23 +61,60 @@
                             <b>Đăng ký</b>
                         </h3>
                     </center>
+                    <!-- ... (previous HTML code) ... -->
                     <form action="RegisterServlet" method="POST">
                         <fieldset class="p-4">
                             <p class="text-danger">${mess }</p>
                             <p class="text-danger">${userexit }</p>
-                            <label for="uname"><b>Tên đăng ký*</b></label> <input
-                                name="name" type="text" placeholder="Tên đăg nhập"
-                                class="border p-3 w-100 my-2"> <label for="uname"><b>Email*</b></label>
-                            <input name="email" type="email" placeholder="Email"
-                                   class="border p-3 w-100 my-2"> <label for="uname"><b>Mật
-                            khẩu*</b></label> <input name="pass" type="password"
-                                                     placeholder="Mật khẩu" class="border p-3 w-100 my-2"> <label
-                                for="uname"><b>Nhập lại mật khẩu*</b></label> <input
-                                name="repass" type="password" placeholder="Nhập lại mật khẩu"
-                                class="border p-3 w-100 my-2">
-                            <button class="btn btn-primary btn-block border-0 py-3"
-                                    type="submit">Đăng ký</button>
+                            <label><b>Họ và tên*</b></label>
+                            <input name="full_name" type="text" placeholder="Họ và tên" class="border p-3 w-100 my-2">
+                            <label><b>Tên đăng ký*</b></label>
+                            <input name="name" type="text" placeholder="Tên đăng nhập" class="border p-3 w-100 my-2">
+                            <label><b>Email*</b></label>
+                            <input name="email" type="email" placeholder="Email" class="border p-3 w-100 my-2">
+                            <label><b>Số điện thoại*</b></label>
+                            <input name="phone" type="text" placeholder="Nhập số điện thoại" class="border p-3 w-100 my-2">
+                            <label><b>Địa chỉ*</b></label>
+                            <input name="address" type="text" placeholder="Địa chỉ" class="border p-3 w-100 my-2">
+                            <label><b>Mật khẩu*</b></label>
+                            <input name="pass" type="password" placeholder="Mật khẩu" class="border p-3 w-100 my-2">
+                            <label><b>Nhập lại mật khẩu*</b></label>
+                            <input name="repass" type="password" placeholder="Nhập lại mật khẩu" class="border p-3 w-100 my-2">
+                            <div class="form-check my-2">
+                                <div class="form-check-left">
+                                    <input class="form-check-input key-checkbox" type="checkbox" id="alreadyHaveAccount" name="alreadyHaveAccount">
+                                    <label class="form-check-label" for="alreadyHaveAccount">
+                                        Đã có khóa
+                                    </label>
+                                </div>
+                                <div class="form-check-right">
+                                    <input class="form-check-input key-checkbox" type="checkbox" id="noKey" name="noKey">
+                                    <label class="form-check-label" for="noKey">
+                                        Chưa có khóa
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- ... (previous HTML code) ... -->
+
+                            <div id="keyFields" style="display: none;">
+                                <label><b>Public Key*</b></label>
+                                <input id="publicKey" name="publicKey" type="text" placeholder="Public Key" class="border p-3 w-100 my-2">
+                                <label><b>Private Key*</b></label>
+                                <input id="privateKey" name="privateKey" type="text" placeholder="Private Key" class="border p-3 w-100 my-2">
+                            </div>
+
+                            <div id="otherKeyFields" style="display: none;">
+                                <label><b>Public Key*</b></label>
+                                <input name="publicKey" type="text" placeholder="Public Key" class="border p-3 w-100 my-2">
+                                <label><b>Private Key*</b></label>
+                                <input name="privateKey" type="text" placeholder="Private Key" class="border p-3 w-100 my-2">
+                            </div>
+                            <button class="btn btn-primary btn-block border-0 py-3" type="submit">Đăng ký</button>
+
+                        </fieldset>
                     </form>
+                    <!-- ... (remaining HTML code) ... -->
+
                 </div>
             </div>
         </div>
@@ -78,5 +133,56 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+<script>
+    function toggleKeyFields(checkbox) {
+        var keyCheckboxes = document.querySelectorAll('.key-checkbox');
+        var keyFields = document.getElementById('keyFields');
+        var otherKeyFields = document.getElementById('otherKeyFields');
+        var publicKeyInput = document.getElementById('publicKey');
+        var privateKeyInput = document.getElementById('privateKey');
+
+        keyCheckboxes.forEach(function (otherCheckbox) {
+            if (otherCheckbox !== checkbox && otherCheckbox.checked) {
+                otherCheckbox.checked = false;
+            }
+        });
+
+        // Check if at least one of the key checkboxes is checked
+        var isChecked = Array.from(keyCheckboxes).some(checkbox => checkbox.checked);
+
+        keyFields.style.display = isChecked ? 'block' : 'none';
+        otherKeyFields.style.display = isChecked ? 'none' : 'block';
+
+        if (isChecked) {
+            // Chưa có khóa được chọn, random khóa và điền vào input
+            publicKeyInput.value = '';
+            privateKeyInput.value = '';
+
+            if (checkbox.id === 'noKey' && checkbox.checked) {
+                // Random khóa khi chọn "Chưa có khóa"
+                generateRandomKey();
+            }
+        }
+    }
+
+    function generateRandomKey() {
+        // Gọi servlet để lấy khóa ngẫu nhiên từ máy chủ
+        // Sử dụng fetch API để thực hiện điều này
+        fetch('/RandomKeyServlet')
+            .then(response => response.json())
+            .then(data => {
+                // Điền khóa vào ô input
+                document.getElementById('publicKey').value = data.publicKey;
+                document.getElementById('privateKey').value = data.privateKey;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    document.querySelectorAll('.key-checkbox').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            toggleKeyFields(checkbox);
+        });
+    });
+</script>
 </body>
 </html>
