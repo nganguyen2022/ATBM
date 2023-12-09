@@ -32,7 +32,7 @@ public class DeleteProServlet extends HttpServlet {
 		String pID = request.getParameter("pid");
 		Load load = new Load();
 		load.deleteProduct(pID);
-		response.sendRedirect("ManagerProServlet");
+		response.sendRedirect("admin/manage?loai=product");
 	}
 
 	/**

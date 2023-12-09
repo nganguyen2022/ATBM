@@ -6,9 +6,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import conn.Load;
+import conn.ViewDAO;
 import models.Product;
+import models.User;
 
 /**
  * Servlet implementation class DetailServlet
@@ -30,12 +33,25 @@ public class DetailServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession();
+		User tk = (User) session.getAttribute("user");
 		String pID = request.getParameter("pid");
-		
-		Load load = new Load();
-		Product pro = load.getProductById(pID);
-		request.setAttribute("detail", pro);
-		request.getRequestDispatcher("detail.jsp").forward(request, response);
+
+		if (tk == null){
+			request.setAttribute("pID", pID);
+			response.sendRedirect("./login.jsp");
+		} else {
+			Load load = new Load();
+			Product pro = load.getProductById(pID);
+			ViewDAO viewDAO = new ViewDAO();
+			try {
+				viewDAO.getViewCount(pID);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			request.setAttribute("detail", pro);
+			request.getRequestDispatcher("detail.jsp").forward(request, response);
+		}
 	}
 
 	/**

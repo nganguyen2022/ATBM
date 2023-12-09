@@ -43,7 +43,7 @@ public class LoadProServlet extends HttpServlet {
 		List<Category> listCat = load.getAllCategory();
 		request.setAttribute("listCat", listCat);
 		
-		request.getRequestDispatcher("editPro.jsp").forward(request, response);
+		request.getRequestDispatcher("admin/repairSP.jsp").forward(request, response);
 	}
 
 	/**

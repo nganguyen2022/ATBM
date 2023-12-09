@@ -5,8 +5,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import models.DetailOrder;
 import models.User;
 import models.Category;
 import models.Product;
@@ -15,7 +18,30 @@ public class Load {
 	Connection conn;
 	PreparedStatement ps;// nem cau lenh query sang sql server
 	ResultSet rs;// nhan kq tra ve
-	
+
+	public static Map<String,Product> mapProduct = loadData();
+	public static Map<String, Product> loadData(){
+		Map<String, Product> mapTemp = new HashMap<String, Product>();
+		try{
+			String query = "SELECT * FROM PRODUCT";
+			Connection conn = new Connect().getconnecttion();// mo ket noi
+			PreparedStatement ps = conn.prepareStatement(query);// nem lenh query
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String pId = rs.getString(1);
+				String pName = rs.getString(2);
+				Float price = rs.getFloat(3);
+				String pDescription = rs.getString(4);
+				String cateId = rs.getString(5);
+				String img = rs.getString(6);
+				Product product = new Product(pId, pName, price, pDescription, cateId, img);
+				mapTemp.put(product.getpID(), product);
+			}
+		} catch(Exception e){
+
+		}
+		return mapTemp;
+	}
 	public List<Product> getAllProduct() {
 		List<Product> list = new ArrayList<>();// danh sach product
 		String query = "SELECT * FROM PRODUCT";
@@ -112,57 +138,60 @@ public class Load {
 
 			return list;
 		}
-		
-		public User login(String uname, String pass) {
-			String query = "SELECT * FROM USERS\n" + "WHERE userName = ? and upassword = ?";
-			try {
-				conn = new Connect().getconnecttion();
-				ps = conn.prepareStatement(query);
-				ps.setString(1, uname);
-				ps.setString(2, pass);
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-				}
-			} catch (Exception e) {
 
+	public User login(String uname, String pass) {
+		String query = "SELECT * FROM USERS\n" + "WHERE userName = ? and upassword = ?";
+		try {
+			conn = new Connect().getconnecttion();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, uname);
+			ps.setString(2, pass);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
 			}
-			return null;
+		} catch (Exception e) {
 
 		}
-		
-		// kt xem user co ton tai chua
-		public User checkUser(String uname) {
-			String query = "SELECT * FROM USERS\n" + "WHERE userName = ?";
-			try {
-				conn =new Connect().getconnecttion();
-				ps = conn.prepareStatement(query);
-				ps.setString(1, uname);
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-				}
-			} catch (Exception e) {
+		return null;
 
+	}
+	// kt xem user co ton tai chua
+	public User checkUser(String uname) {
+		String query = "SELECT * FROM USERS\n" + "WHERE userName = ?";
+		try {
+			conn =new Connect().getconnecttion();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, uname);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
 			}
-			return null;
+		} catch (Exception e) {
+
+		}
+		return null;
+
+	}
+	public void register(String fullname, String username, String email, String phone, String address, String pass, String publicKey, String privateKey) {
+		String query = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, 1)";
+		try {
+			conn =new Connect().getconnecttion();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, fullname);
+			ps.setString(2, username);
+			ps.setString(3, email);
+			ps.setString(4, phone);
+			ps.setString(5, address);
+			ps.setString(6, pass);
+			ps.setString(7, publicKey);
+			ps.setString(8, privateKey);
+			ps.executeUpdate();
+		} catch (Exception e) {
 
 		}
 
-		public void register(String ruser, String rpass, String remail) {
-			String query = "INSERT INTO USERS VALUES(?, ?, ?, 1)";
-			try {
-				conn =new Connect().getconnecttion();
-				ps = conn.prepareStatement(query);
-				ps.setString(1, ruser);
-				ps.setString(2, rpass);
-				ps.setString(3, remail);
-				ps.executeUpdate();
-			} catch (Exception e) {
-
-			}
-
-		}
+	}
 		// xóa sản phẩm
 		public void deleteProduct(String pId) {
 			String query = "DELETE FROM PRODUCT WHERE pId=?;";
@@ -211,6 +240,16 @@ public class Load {
 				e.getStackTrace();
 			}
 		}
+
+	public List<Product> getSanPhamByDH(List<DetailOrder> list){
+		List<Product> rs = new ArrayList<Product>();
+		for (DetailOrder sanPham : list) {
+			String IDsp = sanPham.getIdP();
+			Product sp = getProductById(IDsp);
+			rs.add(sp);
+		}
+		return rs;
+	}
 	public static void main(String[] args) {
 		Load load = new Load();
 		List<Product> list = load.getAllProduct();

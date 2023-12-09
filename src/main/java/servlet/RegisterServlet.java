@@ -38,10 +38,15 @@ public class RegisterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
+		String full_name = request.getParameter("full_name");
 		String uname = request.getParameter("name");
 		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		String address = request.getParameter("address");
 		String pass = request.getParameter("pass");
 		String repass = request.getParameter("repass");
+		String publicKey = request.getParameter("publicKey");
+		String privateKey = request.getParameter("privateKey");
 		
 		if(!pass.equals(repass)) {
 			request.setAttribute("mess", "Mật khẩu bạn nhập không khớp!");
@@ -51,7 +56,7 @@ public class RegisterServlet extends HttpServlet {
 			User u = load.checkUser(uname);
 			request.setAttribute("userexit", "Tài khoản đã tồn tại!");
 			if( u == null) {
-				load.register(uname, pass, email);
+				load.register(full_name, uname, email, phone, address, pass, publicKey, privateKey);
 				response.sendRedirect("ProductServlet");
 			}else {
 				response.sendRedirect("register.jsp");

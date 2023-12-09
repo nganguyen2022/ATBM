@@ -35,7 +35,7 @@ public class HomeServlet extends HttpServlet {
 		List<Category> listCat = load.getAllCategory();
 		
 		request.setAttribute("listCat", listCat);
-		request.getRequestDispatcher("header.jsp").forward(request, response);
+		request.getRequestDispatcher("/header/header.jsp").forward(request, response);
 	}
 
 	/**

@@ -38,7 +38,7 @@ public class EditProServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text.html;charset=UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("eid");
 		String name = request.getParameter("ename");
@@ -51,7 +51,7 @@ public class EditProServlet extends HttpServlet {
 
 		load.editProduct(id, name, price, des, cate,img);
 		
-		request.getRequestDispatcher("ManagerProServlet").forward(request, response);
+		getServletContext().getRequestDispatcher("/admin/manage?loai=product").forward(request, response);
 	}
 
 }

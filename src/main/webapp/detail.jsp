@@ -32,7 +32,7 @@
 
 <body>
 <!-- Header Section Begin -->
-<c:import url="header.jsp" />
+<c:import url="header/header.jsp" />
 <!-- Header Section End -->
 
 <!-- Product Details Section Begin -->
@@ -67,7 +67,11 @@
               </div>
             </div>
           </div>
-          <a href="#" class="primary-btn">Thêm vào giỏ</a>
+          <form action="/cart" method="post">
+            <input type="hidden" name="productCode"
+                   value="<c:out value='${detail.pID}'/>">
+            <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">
+          </form>
           <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
         </div>
       </div>

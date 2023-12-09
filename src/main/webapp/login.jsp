@@ -30,7 +30,7 @@
 </head>
 <body>
 <!-- Header Section Begin -->
-<c:import url="header.jsp" />
+<c:import url="header/header.jsp" />
 <!-- Header Section End -->
 <!-- From login -->
 <section class="login py-5 border-top-1">
@@ -57,6 +57,7 @@
 
               <button class="btn btn-primary btn-block border-0 py-3"
                       type="submit">Đăng nhập</button>
+            </fieldset>
           </form>
         </div>
       </div>

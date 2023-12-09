@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import conn.Load;
+import models.Category;
 
 /**
  * Servlet implementation class AddProServlet
@@ -51,8 +53,11 @@ public class AddProServlet extends HttpServlet {
 		String description = request.getParameter("description");
 		String cate = request.getParameter("cate");
 
+		List<Category> listCat = load.getAllCategory();
+		request.setAttribute("listCate", listCat);
+
 		load.insertProduct(id, name, price, description, cate,img);
-		request.getRequestDispatcher("ManagerProServlet").forward(request, response);
+		request.getRequestDispatcher("/admin/manage?loai=product").forward(request, response);
 
 	}
 
