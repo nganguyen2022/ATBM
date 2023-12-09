@@ -13,6 +13,7 @@ public class User {
 
 	public User(String fullName, String uname, String email, String phone, String address,
 				String pass, String publicKey, String privateKey, int isUser) {
+
 		this.uname = uname;
 		this.pass = pass;
 		this.fullName = fullName;

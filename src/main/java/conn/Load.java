@@ -139,7 +139,8 @@ public class Load {
 			return list;
 		}
 
-	public User login(String uname, String pass) {
+
+		public User login(String uname, String pass) {
 		String query = "SELECT * FROM USERS\n" + "WHERE userName = ? and upassword = ?";
 		try {
 			conn = new Connect().getconnecttion();
@@ -156,6 +157,7 @@ public class Load {
 		return null;
 
 	}
+		
 	// kt xem user co ton tai chua
 	public User checkUser(String uname) {
 		String query = "SELECT * FROM USERS\n" + "WHERE userName = ?";
@@ -171,7 +173,6 @@ public class Load {
 
 		}
 		return null;
-
 	}
 	public void register(String fullname, String username, String email, String phone, String address, String pass, String publicKey, String privateKey) {
 		String query = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, 1)";
