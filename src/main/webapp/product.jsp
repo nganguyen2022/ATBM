@@ -32,7 +32,7 @@
 
 <body>
 <!-- Header Section Begin -->
-<c:import url="header.jsp" />
+<c:import url="header/header.jsp" />
 <!-- Header Section End -->
 
 <!-- Featured Section Begin -->
@@ -47,6 +47,7 @@
     </div>
     <div class="row featured__filter">
       <c:forEach items="${listP }" var="p">
+        <form action="/product/CartServlet?maSP=${p.pID}&action=Them" method="post">
         <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
           <div class="featured__item">
             <div class="featured__item__pic set-bg" data-setbg="${p.img }">
@@ -56,14 +57,11 @@
                 <a href="DetailServlet?pid=${p.pID }">${p.pName }</a>
               </h6>
               <h5>${p.price }VNĐ</h5>
-              <form action="cart" method="post">
-                <input type="hidden" name="productCode"
-                       value="<c:out value='${p.pID}'/>">
                 <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">
-              </form>
             </div>
           </div>
         </div>
+        </form>
       </c:forEach>
     </div>
   </div>

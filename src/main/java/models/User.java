@@ -11,7 +11,9 @@ public class User {
 	private String privateKey;
 	private int isUser;
 
-	public User(String uname, String pass, String fullName, String phone, String email, String address, String publicKey, String privateKey, int isUser) {
+	public User(String fullName, String uname, String email, String phone, String address,
+				String pass, String publicKey, String privateKey, int isUser) {
+
 		this.uname = uname;
 		this.pass = pass;
 		this.fullName = fullName;

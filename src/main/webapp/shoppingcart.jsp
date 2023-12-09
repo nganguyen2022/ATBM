@@ -32,7 +32,7 @@
 
 <body>
 <!-- Header Section Begin -->
-<c:import url="header.jsp" />
+<c:import url="header/header.jsp" />
 <!-- Header Section End -->
 
 <!-- Shoping Cart Section Begin -->

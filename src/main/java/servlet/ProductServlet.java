@@ -15,7 +15,7 @@ import models.Product;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(description = "/product", urlPatterns = { "/ProductServlet" })
+@WebServlet("/ProductServlet")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

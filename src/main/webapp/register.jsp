@@ -48,7 +48,7 @@
 </head>
 <body>
 <!-- Header Section Begin -->
-<c:import url="header.jsp" />
+<c:import url="/header/header.jsp" />
 <!-- Header Section End -->
 <!-- From login -->
 <section class="login py-5 border-top-1">
