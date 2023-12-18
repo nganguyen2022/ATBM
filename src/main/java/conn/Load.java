@@ -1,9 +1,11 @@
 package conn;
 
-import java.sql.Connection;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +15,7 @@ import models.DetailOrder;
 import models.User;
 import models.Category;
 import models.Product;
-
+import java.util.Date;
 public class Load {
 	Connection conn;
 	PreparedStatement ps;// nem cau lenh query sang sql server
@@ -141,7 +143,7 @@ public class Load {
 
 
 		public User login(String uname, String pass) {
-		String query = "SELECT * FROM USERS\n" + "WHERE userName = ? and upassword = ?";
+		String query = "SELECT * FROM USERS WHERE userName = ? and upassword = ?";
 		try {
 			conn = new Connect().getconnecttion();
 			ps = conn.prepareStatement(query);
@@ -149,7 +151,15 @@ public class Load {
 			ps.setString(2, pass);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
+				return new User(
+						rs.getString("fullname"),
+						rs.getString("userName"),
+						rs.getString("email"),
+						rs.getString("phone"),
+						rs.getString("address"),
+						rs.getString("upassword"),
+						rs.getInt("isUser")
+				);
 			}
 		} catch (Exception e) {
 
@@ -160,39 +170,106 @@ public class Load {
 		
 	// kt xem user co ton tai chua
 	public User checkUser(String uname) {
-		String query = "SELECT * FROM USERS\n" + "WHERE userName = ?";
+		String query = "SELECT * FROM USERS WHERE userName = ?";
 		try {
 			conn =new Connect().getconnecttion();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, uname);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getInt(9));
+				return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getInt(7));
 			}
 		} catch (Exception e) {
 
 		}
 		return null;
 	}
-	public void register(String fullname, String username, String email, String phone, String address, String pass, String publicKey, String privateKey) {
-		String query = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, 1)";
-		try {
-			conn =new Connect().getconnecttion();
-			ps = conn.prepareStatement(query);
-			ps.setString(1, fullname);
-			ps.setString(2, username);
-			ps.setString(3, email);
-			ps.setString(4, phone);
-			ps.setString(5, address);
-			ps.setString(6, pass);
-			ps.setString(7, publicKey);
-			ps.setString(8, privateKey);
-			ps.executeUpdate();
-		} catch (Exception e) {
+//	public static void register(String fullName, String userName, String email, String phone, String address,
+//								String password, String publicKey, String privateKey) {
+//		try {
+//			Connection conn = new Connect().getconnecttion();
+//			registerUser(conn, fullName, userName, email, phone, address, password);
+//			registerUserKey(conn, userName, publicKey);
+//
+//			// Save private key to user's newly created directory
+//			savePrivateKeyToFile(userName, privateKey);
+//
+//			System.out.println("User registered successfully!");
+//		} catch (SQLException | ClassNotFoundException | IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	public static void register(String fullName, String userName, String email, String phone, String address,
+								String password, String publicKey, String privateKey) {
+		try (Connection conn = new Connect().getconnecttion()) {
+			registerUser(conn, fullName, userName, email, phone, address, password);
+			registerUserKey(conn, userName, publicKey);
 
+			// Save private key to file
+			savePrivateKeyToFile(userName, privateKey);
+
+			System.out.println("User registered successfully!");
+		} catch (SQLException | ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	private static void registerUser(Connection conn, String fullName, String userName, String email, String phone,
+									 String address, String password) throws SQLException {
+		String insertUserQuery = "INSERT INTO USERS (fullname, userName, email, phone, address, upassword, isUser) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement userStatement = conn.prepareStatement(insertUserQuery)) {
+			userStatement.setString(1, fullName);
+			userStatement.setString(2, userName);
+			userStatement.setString(3, email);
+			userStatement.setString(4, phone);
+			userStatement.setString(5, address);
+			userStatement.setString(6, password);
+			userStatement.setInt(7, 1); // Assuming 1 represents a regular user
+
+			userStatement.executeUpdate();
+		}
+	}
+
+	private static void registerUserKey(Connection conn, String userName, String publicKey) throws SQLException {
+		String insertUserKeyQuery = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, ?)";
+		try (PreparedStatement userKeyStatement = conn.prepareStatement(insertUserKeyQuery)) {
+			userKeyStatement.setString(1, userName);
+			userKeyStatement.setString(2, publicKey);
+			userKeyStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+			userKeyStatement.setInt(4, 1); // Assuming 1 represents an active key
+
+			userKeyStatement.executeUpdate();
+		}
+	}
+	private static void savePrivateKeyToFile(String username, String privateKey) throws IOException {
+		// Tạo đường dẫn mới cho mỗi người dùng
+		String baseDirectory = "D:\\KEYS\\";
+		String userDirectory = baseDirectory + username + "\\";
+
+		// Tạo thư mục mới nếu nó không tồn tại
+		File directory = new File(userDirectory);
+		if (!directory.exists()) {
+			directory.mkdirs();
 		}
 
+		// Tạo đường dẫn cho file private key
+		String filePath = userDirectory + "private_key.txt";
+
+		try (PrintWriter writer = new PrintWriter(filePath)) {
+			writer.write(privateKey);
+		}
 	}
+
+//	private static void savePrivateKeyToFile(String username, String privateKey) throws IOException {
+//		// Tạo file và lưu private key vào file
+//		// Đường dẫn và tên file có thể được điều chỉnh theo yêu cầu của bạn
+//		String filePath = "D:\\Nam4ki1\\" + username + "_private_key.txt";
+//		try (PrintWriter writer = new PrintWriter(filePath)) {
+//			writer.write(privateKey);
+//		}
+//	}
+
 		// xóa sản phẩm
 		public void deleteProduct(String pId) {
 			String query = "DELETE FROM PRODUCT WHERE pId=?;";

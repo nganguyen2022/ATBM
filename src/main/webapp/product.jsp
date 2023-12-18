@@ -29,12 +29,63 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet">
 </head>
-
+<style>
+  .product__a {
+    padding: 20px;
+    padding-left: 100px;
+  }
+</style>
 <body>
 <!-- Header Section Begin -->
 <c:import url="header/header.jsp" />
 <!-- Header Section End -->
+<section class="hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="hero__categories">
+          <div class="hero__categories__all">
+            <i class="fa fa-bars"></i> <span>Danh mục sản phẩm</span>
+          </div>
+          <ul>
+            <li><a href="CategoryServlet?cid=AN">Áo nam</a></li>
+            <li><a href="CategoryServlet?cid=NU">Áo nữ</a></li>
+            <li><a href="CategoryServlet?cid=AK">Áo khoác</a></li>
+            <li><a href="CategoryServlet?cid=P">Áo Polo</a></li>
 
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="hero__search">
+          <div class="hero__search__form">
+            <form action="SearchServlet" method="post">
+              <div class="hero__search__categories">
+                Bạn muốn tìm?
+              </div>
+              <input value="${value }" name="txt" type="text"
+                     placeholder="Tìm kiếm">
+              <button type="submit" class="site-btn">Tìm kiếm</button>
+            </form>
+          </div>
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-phone"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <h5>0387524615</h5>
+              <span>Hỗ trợ 24/7</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero__item set-bg" data-setbg="images/bgtc.jpg">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Hero Section End -->
 <!-- Featured Section Begin -->
 <section class="featured spad">
   <div class="container">
@@ -45,7 +96,7 @@
         </div>
       </div>
     </div>
-    <div class="row featured__filter">
+    <div class="row product__a">
       <c:forEach items="${listP }" var="p">
         <form action="/product/CartServlet?maSP=${p.pID}&action=Them" method="post">
         <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
@@ -54,9 +105,9 @@
             </div>
             <div class="featured__item__text">
               <h6>
-                <a href="DetailServlet?pid=${p.pID }">${p.pName }</a>
+                <a class="namepro" style="white-space: nowrap" href="DetailServlet?pid=${p.pID }">${p.pName }</a>
               </h6>
-              <h5>${p.price }VNĐ</h5>
+              <h5 style="padding-left: 142px">${p.price }VNĐ</h5>
                 <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">
             </div>
           </div>

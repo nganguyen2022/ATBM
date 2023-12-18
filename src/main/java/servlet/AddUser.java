@@ -51,7 +51,7 @@ public class AddUser extends HttpServlet {
             isUser = Integer.parseInt(isUserParam);
         }
 
-        User user = new User(fullName, userName, email, phone, address, upassword, publicKey, privateKey, isUser);
+        User user = new User(fullName, userName, email, phone, address, upassword, isUser);
         acc.add(user);
         request.getRequestDispatcher("/admin/manage?loai=user").forward(request, response);
     }
