@@ -184,21 +184,7 @@ public class Load {
 		}
 		return null;
 	}
-//	public static void register(String fullName, String userName, String email, String phone, String address,
-//								String password, String publicKey, String privateKey) {
-//		try {
-//			Connection conn = new Connect().getconnecttion();
-//			registerUser(conn, fullName, userName, email, phone, address, password);
-//			registerUserKey(conn, userName, publicKey);
-//
-//			// Save private key to user's newly created directory
-//			savePrivateKeyToFile(userName, privateKey);
-//
-//			System.out.println("User registered successfully!");
-//		} catch (SQLException | ClassNotFoundException | IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 	public static void register(String fullName, String userName, String email, String phone, String address,
 								String password, String publicKey, String privateKey) {
 		try (Connection conn = new Connect().getconnecttion()) {
@@ -260,16 +246,6 @@ public class Load {
 			writer.write(privateKey);
 		}
 	}
-
-//	private static void savePrivateKeyToFile(String username, String privateKey) throws IOException {
-//		// Tạo file và lưu private key vào file
-//		// Đường dẫn và tên file có thể được điều chỉnh theo yêu cầu của bạn
-//		String filePath = "D:\\Nam4ki1\\" + username + "_private_key.txt";
-//		try (PrintWriter writer = new PrintWriter(filePath)) {
-//			writer.write(privateKey);
-//		}
-//	}
-
 		// xóa sản phẩm
 		public void deleteProduct(String pId) {
 			String query = "DELETE FROM PRODUCT WHERE pId=?;";
