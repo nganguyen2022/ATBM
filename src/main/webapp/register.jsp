@@ -64,7 +64,11 @@
                     <!-- ... (previous HTML code) ... -->
                     <form action="RegisterServlet" method="POST">
                         <fieldset class="p-4">
+                            <p class="text-danger">${messuname}</p>
+                            <p class="text-danger">${messmail }</p>
                             <p class="text-danger">${mess }</p>
+                            <p class="text-danger">${messpass }</p>
+                            <p class="text-danger">${messkeys}</p>
                             <p class="text-danger">${userexit }</p>
                             <label><b>Họ và tên*</b></label>
                             <input name="full_name" type="text" placeholder="Họ và tên" class="border p-3 w-100 my-2">
@@ -155,16 +159,51 @@
         otherKeyFields.style.display = isChecked ? 'none' : 'block';
 
         if (isChecked) {
-            // Chưa có khóa được chọn, random khóa và điền vào input
+            // If at least one checkbox is checked
             publicKeyInput.value = '';
             privateKeyInput.value = '';
 
             if (checkbox.id === 'noKey' && checkbox.checked) {
-                // Random khóa khi chọn "Chưa có khóa"
+                // Random key when "Chưa có khóa" is selected
                 generateRandomKey();
             }
+        } else {
+            // If no checkbox is checked, hide the key input fields
+            publicKeyInput.value = '';
+            privateKeyInput.value = '';
         }
     }
+
+    // function toggleKeyFields(checkbox) {
+    //     var keyCheckboxes = document.querySelectorAll('.key-checkbox');
+    //     var keyFields = document.getElementById('keyFields');
+    //     var otherKeyFields = document.getElementById('otherKeyFields');
+    //     var publicKeyInput = document.getElementById('publicKey');
+    //     var privateKeyInput = document.getElementById('privateKey');
+    //
+    //     keyCheckboxes.forEach(function (otherCheckbox) {
+    //         if (otherCheckbox !== checkbox && otherCheckbox.checked) {
+    //             otherCheckbox.checked = false;
+    //         }
+    //     });
+    //
+    //     // Check if at least one of the key checkboxes is checked
+    //     var isChecked = Array.from(keyCheckboxes).some(checkbox => checkbox.checked);
+    //
+    //     keyFields.style.display = isChecked ? 'block' : 'none';
+    //     otherKeyFields.style.display = isChecked ? 'none' : 'block';
+    //
+    //     if (isChecked) {
+    //         // Chưa có khóa được chọn, random khóa và điền vào input
+    //         publicKeyInput.value = '';
+    //         privateKeyInput.value = '';
+    //
+    //         if (checkbox.id === 'noKey' && checkbox.checked) {
+    //             // Random khóa khi chọn "Chưa có khóa"
+    //             generateRandomKey();
+    //         }
+    //     }
+    // }
 
     function generateRandomKey() {
         // Gọi servlet để lấy khóa ngẫu nhiên từ máy chủ
@@ -184,6 +223,12 @@
             toggleKeyFields(checkbox);
         });
     });
+    // document.querySelectorAll('.key-checkbox').forEach(function (checkbox) {
+    //     checkbox.addEventListener('change', function () {
+    //         toggleKeyFields(checkbox);
+    //     });
+    // });
+
 </script>
 </body>
 </html>
