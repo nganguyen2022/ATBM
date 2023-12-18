@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import conn.Load;
+import models.EncryptPass;
 import models.User;
 
 /**
@@ -40,8 +41,9 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		String user = request.getParameter("uname");
 		String pass = request.getParameter("pass");
-		
+
 		Load load = new Load();
+		pass = EncryptPass.toSHA1(pass);
 		User u = load.login(user, pass);
 		if(u == null) {
 			request.setAttribute("massage", "Sai thông tin đăng nhập");

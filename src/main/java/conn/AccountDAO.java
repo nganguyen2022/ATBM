@@ -47,7 +47,7 @@ public class AccountDAO implements ObjectDAO{
                 String privateKey = rs.getString(8);
                 int isUser = rs.getInt(9);
 
-                User user = new User(fullName, userName, email, phone, address, pass, publicKey, privateKey, isUser);
+                User user = new User(fullName, userName, email, phone, address, pass, isUser);
                 mapTemp.put(user.getUname(), user);
 
             }
@@ -114,7 +114,7 @@ public class AccountDAO implements ObjectDAO{
     public boolean add(Object obj) {
         User tk = (User) obj;
         mapAccount.put(tk.getUname(), tk);
-        String sql = "insert into USERS values(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into USERS values(?,?,?,?,?,?,?)";
 
         try {
             Connection connect = new Connect().getconnecttion();
@@ -125,9 +125,7 @@ public class AccountDAO implements ObjectDAO{
             ppstm.setString(4, tk.getPhone());
             ppstm.setString(5, tk.getAddress());
             ppstm.setString(6, tk.getPass());
-            ppstm.setString(7, tk.getPublicKey());
-            ppstm.setString(8, tk.getPrivateKey());
-            ppstm.setInt(9, tk.getIsUser());
+            ppstm.setInt(7, tk.getIsUser());
             ppstm.executeUpdate();
             return true;
 
@@ -171,8 +169,7 @@ public class AccountDAO implements ObjectDAO{
             ResultSet rs = ps.executeQuery();
             while (rs.next())
                 return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                        rs.getString(5), rs.getString(6),rs.getString(7),
-                        rs.getString(8), rs.getInt(9));
+                        rs.getString(5), rs.getString(6), rs.getInt(7));
 
         } catch (Exception e) {
             e.printStackTrace();

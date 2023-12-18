@@ -7,21 +7,16 @@ public class User {
 	private String phone;
 	private String email;
 	private String address;
-	private String publicKey;
-	private String privateKey;
 	private int isUser;
 
 	public User(String fullName, String uname, String email, String phone, String address,
-				String pass, String publicKey, String privateKey, int isUser) {
-
+				String pass, int isUser) {
 		this.uname = uname;
 		this.pass = pass;
 		this.fullName = fullName;
 		this.phone = phone;
 		this.email = email;
 		this.address = address;
-		this.publicKey = publicKey;
-		this.privateKey = privateKey;
 		this.isUser = isUser;
 	}
 
@@ -73,22 +68,6 @@ public class User {
 		this.address = address;
 	}
 
-	public String getPublicKey() {
-		return publicKey;
-	}
-
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
-
-	public String getPrivateKey() {
-		return privateKey;
-	}
-
-	public void setPrivateKey(String privateKey) {
-		this.privateKey = privateKey;
-	}
-
 	public int getIsUser() {
 		return isUser;
 	}
@@ -106,8 +85,6 @@ public class User {
 				", phone='" + phone + '\'' +
 				", email='" + email + '\'' +
 				", address='" + address + '\'' +
-				", publicKey='" + publicKey + '\'' +
-				", privateKey='" + privateKey + '\'' +
 				", isUser=" + isUser +
 				'}';
 	}

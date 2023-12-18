@@ -46,9 +46,9 @@
           <form action="LoginServlet" method="POST">
             <fieldset class="p-4">
               <p class="text-danger">${massage }</p>
-              <label for="uname"><b>Tên đăng nhập*</b></label>
+              <label><b>Tên đăng nhập*</b></label>
               <input name="uname" type="text" placeholder="Tên đăg nhập" class="border p-3 w-100 my-2"  required="required">
-              <label for="uname"><b>Mật khẩu*</b></label>
+              <label><b>Mật khẩu*</b></label>
               <input name="pass" type="password" placeholder="Mật khẩu" class="border p-3 w-100 my-2" required="required">
               <div class="loggedin-forgot">
                 <input type="checkbox" id="remember" name="remember"> <label

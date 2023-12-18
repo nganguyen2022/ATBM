@@ -1,56 +1,56 @@
 ﻿create database WEBCLOTHES;
+ use WEBCLOTHES;
 
-USE WEBCLOTHES;
--- Bảng Danh mục
 CREATE TABLE USERS (
-					   fullname NVARCHAR(100),
-					   userName NVARCHAR(50) NOT NULL PRIMARY KEY,
-					   email NVARCHAR(50),
-					   phone VARCHAR(12),
-					   address NVARCHAR(1000),
-					   upassword NVARCHAR(30) NOT NULL,
-					   publickey NVARCHAR(2000),
-					   privatekey NVARCHAR(2000),
-					   isUser int);
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       fullname NVARCHAR(100),
+                       userName NVARCHAR(50) NOT NULL UNIQUE,
+                       email NVARCHAR(50),
+                       phone VARCHAR(12),
+                       address NVARCHAR(1000),
+                       upassword NVARCHAR(30) NOT NULL,
+                       isUser INT
+);
+
+CREATE TABLE USERKEYS (
+                          keyID INT AUTO_INCREMENT PRIMARY KEY,
+                          userID NVARCHAR(50),
+                          FOREIGN KEY (userID) REFERENCES USERS(userName),
+                          publicKey NVARCHAR(2000),
+                          date_time TIMESTAMP,
+                          key_status INT
+);
 
 CREATE TABLE CATEGORIES (cateId CHAR(5) NOT NULL PRIMARY KEY,
-						 cateName NVARCHAR(50) NOT NULL );
+                         cateName NVARCHAR(50) NOT NULL );
 
 CREATE TABLE PRODUCT (pId CHAR(5) NOT NULL PRIMARY KEY,
-					  pName NVARCHAR(50) NOT NULL,
-					  price float,
-					  pDescription NVARCHAR(200),
-					  cateId CHAR(5) REFERENCES CATEGORIES(cateId) ,
-					  img NVARCHAR(500));
-
+                      pName NVARCHAR(50) NOT NULL,
+                      price float,
+                      pDescription NVARCHAR(200),
+                      cateId CHAR(5) REFERENCES CATEGORIES(cateId) ,
+                      img NVARCHAR(500));
 create table OrderProduct( idOrder varchar(5) PRIMARY KEY ,
-						   nameAcc nvarchar(50) ,
-						   dateOrder nvarchar(50),
-						   dateDelivery nvarchar(50), /* ngày nhận hàng */
-						   totalMoney float,
-						   phone varchar(10),
-						   nameRecipient nvarchar(50),    /*tên người nhận*/
-						   address nvarchar(100),
-						   note nvarchar(500),
-						   checkout nvarchar(500),
-						   status int
+                           nameAcc nvarchar(50) ,
+                           dateOrder nvarchar(50),
+                           dateDelivery nvarchar(50), /* ngày nhận hàng */
+                           totalMoney float,
+                           phone varchar(10),
+                           nameRecipient nvarchar(50),    /*tên người nhận*/
+                           address nvarchar(100),
+                           note nvarchar(500),
+                           checkout nvarchar(500),
+                           status int
 );
 create table DetailOrder(idOrder varchar(5) references OrderProduct(idOrder),
-						 pId char(5) REFERENCES Product(pId),
-						 amount int,
-						 price float,
-						 constraint PK_DS PRIMARY KEY(idOrder, pId)
+                         pId char(5) REFERENCES Product(pId),
+                         amount int,
+                         price float,
+                         constraint PK_DS PRIMARY KEY(idOrder, pId)
 );
 create table Views(pId char(5)references Product(pId),
-				   view_count int);
-drop table OrderProduct;
-select * from OrderProduct;
-select * from DetailOrder;
-INSERT INTO USERS VALUES ('tom', 'tom001', 'Tom', '0123456789','tom@gmail.com', 'Thủ Đức', 1);
-INSERT INTO USERS VALUES ('jen', 'jen001', 'Jen', '0987654321','jen@gmail.com',  'Dĩ An', 1);
-INSERT INTO USERS VALUES ('dan', 'dan001','Nguyễn Văn Dẫn','0987656908','dan@gmail.com','Dĩ An, Bình Dương', 0);
-INSERT INTO USERS VALUES ('hau', 'hau001', 'Nguyễn Thị Hậu','0987890987', 'hau@gmail.com', 'Đồng Nai', 0);
-
+                   view_count int);
+INSERT INTO USERS VALUES (2,'Nguyễn Văn Dẫn','dan','dan@gmail.com','0384374241','Dĩ An, Bình Dương','dan001', 0);
 INSERT INTO CATEGORIES VALUES ('AN', N'Áo nam');
 INSERT INTO CATEGORIES VALUES ('NU', N'Áo nữ');
 INSERT INTO CATEGORIES VALUES ('P', N'Áo Polo');
@@ -132,13 +132,10 @@ INSERT INTO PRODUCT VALUES ('AK7', N'Áo khoác nữ màu nâu', 215.000, N'Ch�
 -- 38
 INSERT INTO PRODUCT VALUES ('AK8', N'Áo khoác nữ jeans', 145.000, N'Chất liệu vải jeans, chắc chắn, .','AK', 'http://localhost:8080/WebBanAo/images/ak8.jpg');
 
-SELECT * FROM PRODUCT
-WHERE pId = 'AN10';
 
-SELECT * FROM USERS
-WHERE userName = 'dan' and upassword = 'dan001';
 
-INSERT INTO USERS VALUES('hen', 'hen001', 'hen@gmail.com', 1);
 
-INSERT INTO PRODUCT(pId, pName, price, pDescription, cateId, img) VALUES ('AK9', N'Áo khoác jeans', 145.000, N'Chất liệu vải jeans, chắc chắn, .','AK', 'http://localhost:8080/WebBanAo/images/ak9.jpg');
+
+
+
 

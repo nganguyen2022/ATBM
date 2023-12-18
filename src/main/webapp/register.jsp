@@ -109,6 +109,7 @@
                                 <label><b>Private Key*</b></label>
                                 <input name="privateKey" type="text" placeholder="Private Key" class="border p-3 w-100 my-2">
                             </div>
+                            <label>*Sau khi đăng ký thành công khóa của bạn sẽ được lưu với đường dẫn D:\KEYS\</label>
                             <button class="btn btn-primary btn-block border-0 py-3" type="submit">Đăng ký</button>
 
                         </fieldset>
