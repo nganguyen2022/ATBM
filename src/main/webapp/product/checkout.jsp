@@ -140,6 +140,20 @@
 											</p>
 										</div>
 								</div>
+								<div class="containera">
+                                    <form action="upload" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                             <label for="file">Tải private key lên:</label><br>
+                                             <input type="file" name="file" id="file" required>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="image">Tải ảnh chữ ký lên:</label><br>
+                                             <input type="file" name="image" id="image" accept="image/*" required><br>
+                                             <img style="max-width:40%" id="preview" src="#" alt="Preview" style="display: none;">
+                                       </div>
+
+                                    </form>
+                                </div>
 								<div class="dialog">
 									<p class="dialong__title">Xác nhận</p>
 									<div class="dialog__main">
@@ -288,7 +302,25 @@
 		return result;
 	}
 </script>
+<script>
+        document.getElementById("image").addEventListener("change", function() {
+            var preview = document.getElementById("preview");
+            var file = this.files[0];
 
+            if (file) {
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function() {
+                    preview.style.display = "block";
+                    preview.src = reader.result;
+                });
+
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = "none";
+            }
+        });
+    </script>
 </body>
 
 <!-- Mirrored from template.hasthemes.com/ruiz/ruiz/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:50:36 GMT -->
