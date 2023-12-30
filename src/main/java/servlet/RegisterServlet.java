@@ -7,6 +7,8 @@ import models.User;
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -58,6 +60,11 @@ public class RegisterServlet extends HttpServlet {
 			request.getRequestDispatcher("register.jsp").forward(request, response);
 			return;
 		}
+		if (!isValidRSAKeyPair(publicKey, privateKey)) {
+			request.setAttribute("messkeyss", "Khóa công khai và khóa riêng tư không hợp lệ!");
+			request.getRequestDispatcher("register.jsp").forward(request, response);
+			return;
+		}
 
 		if (!isValidPassword(pass)) {
 			request.setAttribute("messpass", "Mật khẩu phải có ít nhất 6 ký tự và 1 ký tự đặc biệt!");
@@ -71,17 +78,26 @@ public class RegisterServlet extends HttpServlet {
 			if (u == null) {
 				try {
 					pass = EncryptPass.toSHA1(pass);
+
+					// Check if user selected "Already have key" and provided a public key
+					if (request.getParameter("alreadyHaveAccount") != null && publicKey != null && !publicKey.isEmpty()) {
+						// Check if the provided public key already exists in the database
+						if (load.isPublicKeyExists(publicKey)) {
+							// Public key already exists, show error message
+							request.setAttribute("messkeys", "Khóa đã tồn tại trong hệ thống!");
+							request.getRequestDispatcher("register.jsp").forward(request, response);
+							return;
+						}
+					}
+
 					load.register(full_name, uname, email, phone, address, pass, publicKey, privateKey);
-
-
-					// Chuyển hướng hoặc trả về thông báo đăng ký thành công
 					response.sendRedirect("login.jsp");
 				} catch (Exception e) {
 					e.printStackTrace();
 					request.setAttribute("mess", "An error occurred during registration.");
 					request.getRequestDispatcher("register.jsp").forward(request, response);
 				}
-			} else {
+			}else {
 				request.setAttribute("userexit", "Tài khoản đã tồn tại!");
 				request.getRequestDispatcher("register.jsp").forward(request, response);
 			}
@@ -124,6 +140,43 @@ public class RegisterServlet extends HttpServlet {
 			keyFactory.generatePrivate(privateKeySpec);
 
 			return true;
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			return false;
+		}
+	}
+
+	public static boolean isValidRSAKeyPair(String publicKey, String privateKey) {
+		try {
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			// Check the format of the public key
+			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+			keyFactory.generatePublic(publicKeySpec);
+
+			// Check the format of the private key
+			PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+			keyFactory.generatePrivate(privateKeySpec);
+
+			// Check if the public and private keys form a valid key pair
+			return isKeyPairMatch(publicKey, privateKey);
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			return false;
+		}
+	}
+
+	private static boolean isKeyPairMatch(String publicKey, String privateKey) {
+		// Compare the modulus of the public and private keys
+		try {
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+			RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
+
+			PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+			RSAPrivateKey privKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
+
+			// Check if the modulus of the public key matches the modulus of the private key
+			return pubKey.getModulus().equals(privKey.getModulus());
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			return false;
 		}
