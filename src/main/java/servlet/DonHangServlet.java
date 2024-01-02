@@ -1,11 +1,9 @@
 package servlet;
 
+import conn.AccountDAO;
 import conn.DetailOrderDAO;
 import conn.OrderDAO;
-import models.BillProduct;
-import models.DetailOrder;
-import models.OrderProduct;
-import models.User;
+import models.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +36,14 @@ public class DonHangServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
+			HttpSession session = request.getSession();
+			User tk = (User) session.getAttribute("user");
+			System.out.println(tk.toString());
+
+			Keys puk = AccountDAO.getKeyByUser(tk.getUname());
+			System.out.println(puk.toString());
+
+			RSAKey rsa = new RSAKey();
 			String fName= request.getParameter("Firstname");
 			String telephone = request.getParameter("telephone");
 			String note = request.getParameter("note");
@@ -43,9 +51,13 @@ public class DonHangServlet extends HttpServlet {
 			String dateDeliveryOder = request.getParameter("dateDeliveryOder");
 			String addressOder = request.getParameter("addressOder");
 			String addressDetail = request.getParameter("address-details");
+			String privateKey = request.getParameter("prikey");
+
+//kiem tra privatekey voi pulickey co phai cung 1 bo khoa khong
+			if(puk !=null && !rsa.areKeyPairsMatching(privateKey,puk.getPublicKey())){
+				response.getWriter().println("Private key không hợp lệ");
+			}
 			addressOder = addressDetail + ","+ addressOder;
-			HttpSession session = request.getSession();
-			User tk = (User) session.getAttribute("user");
 			Map<String, BillProduct> ds = (Map<String, BillProduct>) session.getAttribute("cart");
 			double tong = (double) session.getAttribute("fullPrice");
 			String tongS = String.valueOf(tong);
@@ -54,23 +66,28 @@ public class DonHangServlet extends HttpServlet {
 			if(telephone==null) telephone = tk.getPhone();
 
 			String date = String.valueOf(java.time.LocalDate.now());
-
+			List<DetailOrder> dos = new ArrayList<>();
 			for (BillProduct product : ds.values()) {
 
 				DetailOrder ds_dh = new DetailOrder(id, product.getIdP(), product.getQuantity(), product.getTotal());
+				dos.add(ds_dh);
 				new DetailOrderDAO().add(ds_dh);
 			}
-				OrderProduct dh = new OrderProduct(id, tk.getFullName(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0");
-				new OrderDAO().add(dh);
-				session.removeAttribute("sizeCart");
-				session.removeAttribute("cart");
-				request.getRequestDispatcher("/ProductServlet").forward(request, response);
+			OrderProduct dh = new OrderProduct(id, tk.getFullName(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0","");
+			String dataInitSignature = dh.getDataInitSignature(dos);
+			String ck = new RSAKey().sign(dataInitSignature, privateKey);
+			//tao chu ky moi
+			dh.setSignature(ck);
+			new OrderDAO().add(dh);
+			session.removeAttribute("sizeCart");
+			session.removeAttribute("cart");
+			request.getRequestDispatcher("/ProductServlet").forward(request, response);
 
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 
-		
+
 	}
 
 	/**

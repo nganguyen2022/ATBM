@@ -36,7 +36,8 @@ public class OrderDAO implements ObjectDAO {
 				String note  = rs.getString(9);
 				String checkout = rs.getString(10);
 				String status  = rs.getString(11);
-				OrderProduct donHang = new OrderProduct(idOrder, nameAcc, dateOrder,dateDelivery, totalMoney, phone, nameRecipient, address, note, checkout, status);
+				String signature  = rs.getString(12);
+				OrderProduct donHang = new OrderProduct(idOrder, nameAcc, dateOrder,dateDelivery, totalMoney, phone, nameRecipient, address, note, checkout, status, signature);
 				mapTemp.put(donHang.getIdOrder(), donHang);
 
 			}
@@ -51,7 +52,7 @@ public class OrderDAO implements ObjectDAO {
 	public boolean add(Object obj) {
 		OrderProduct sp = (OrderProduct) obj;
 		mapDonHang.put(sp.getIdOrder(), sp);
-		String sql = "insert into OrderProduct values(?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into OrderProduct values(?,?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
@@ -66,6 +67,7 @@ public class OrderDAO implements ObjectDAO {
 			ppstm.setString(9,sp.getNote());
 			ppstm.setString(10,sp.getCheckout());
 			ppstm.setString(11, sp.getStatus());
+			ppstm.setString(12, sp.getSignature());
 			ppstm.executeUpdate();
 			return true;
 		} catch (Exception e) {
@@ -80,7 +82,7 @@ public class OrderDAO implements ObjectDAO {
 		OrderProduct donHang = (OrderProduct) obj;
 		mapDonHang.replace(id, donHang);
 		try {
-			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?,nameRecipient=?,address=?,note=?, checkout=?,status=? where idOrder=?";
+			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?,nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,donHang.getNameAcc());
@@ -93,7 +95,8 @@ public class OrderDAO implements ObjectDAO {
 			ppstm.setString(8,donHang.getNote());
 			ppstm.setString(9, donHang.getCheckout());
 			ppstm.setString(10,donHang.getStatus());
-			ppstm.setString(11,donHang.getIdOrder());
+			ppstm.setString(11,donHang.getSignature());
+			ppstm.setString(12,donHang.getIdOrder());
 			ppstm.executeUpdate();
 			return true;
 
@@ -141,7 +144,9 @@ public class OrderDAO implements ObjectDAO {
 						rs.getString(8),
 						rs.getString(9),
 						rs.getString(10),
-						rs.getString(11)
+						rs.getString(11),
+						rs.getString(12)
+
 				);
 				list.add(sp);
 			}
@@ -190,7 +195,8 @@ public class OrderDAO implements ObjectDAO {
 						rs.getString(8),
 						rs.getString(9),
 						rs.getString(10),
-						rs.getString(11));
+						rs.getString(11),
+						rs.getString(12));
 
 				list.add(dh);
 			}
