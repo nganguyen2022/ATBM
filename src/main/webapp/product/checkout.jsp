@@ -141,27 +141,22 @@
 										</div>
 								</div>
 								<div class="containera">
-                                    <form action="upload" method="post" enctype="multipart/form-data">
-                                        <div class="form-group">
-                                             <label for="file">Tải private key lên:</label><br>
-                                             <input type="file" name="file" id="file" required>
-                                        </div>
-                                        <div class="form-group">
-                                             <label for="image">Tải ảnh chữ ký lên:</label><br>
-                                             <input type="file" name="image" id="image" accept="image/*" required><br>
-                                             <img style="max-width:40%" id="preview" src="#" alt="Preview" style="display: none;">
-                                       </div>
-
-                                    </form>
+                                   <form action="DonHang" method="post" enctype="multipart/form-data">
+                                     <div class="form-group">
+                                        <label for="prikey">Nhập private key của bạn:</label><br>
+                                        <input type="text" id="prikey" name="prikey" required>
+                                     </div>
+                                      <button class="dialog__btn dialog__btn-ok" type="submit">Đồng ý</button>
+                                   </form>
                                 </div>
-								<div class="dialog">
+								<!--<div class="dialog">
 									<p class="dialong__title">Xác nhận</p>
 									<div class="dialog__main">
 										<p class="dialog__text">Bạn có muốn thanh toán?</p>
 										<button class="dialog__btn " type="button">Hủy</button>
 										<button class="dialog__btn dialog__btn-ok" type="submit">Đồng ý</button>
 									</div>
-								</div>
+								</div>-->
 							</div>
 							<!-- billing-details-wrap end -->
 						</div>
