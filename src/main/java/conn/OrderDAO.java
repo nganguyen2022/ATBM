@@ -84,6 +84,7 @@ public class OrderDAO implements ObjectDAO {
 		try {
 			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?," +
 					"nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
+
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,donHang.getNameAcc());

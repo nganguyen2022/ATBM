@@ -248,19 +248,19 @@ public class Load {
 	}
 	public boolean isPublicKeyExists(String publicKey) {
 
-		// Prepare the SQL statement
+					// Prepare the SQL statement
 		String query = "SELECT COUNT(*) FROM USERKEYS WHERE publicKey = ?";
-		try (PreparedStatement statement = conn.prepareStatement(query)) {
-			statement.setString(1, publicKey);
-			try (ResultSet resultSet = statement.executeQuery()) {
-				if (resultSet.next()) {
-					int count = resultSet.getInt(1);
-					return count > 0; // If count > 0, the key already exists
+			try (PreparedStatement statement = conn.prepareStatement(query)) {
+				statement.setString(1, publicKey);
+				try (ResultSet resultSet = statement.executeQuery()) {
+					if (resultSet.next()) {
+						int count = resultSet.getInt(1);
+						return count > 0; // If count > 0, the key already exists
+					}
 				}
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
 			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
 
 		return false;
 	}
@@ -325,15 +325,17 @@ public class Load {
 	public static void main(String[] args) {
 		Load load = new Load();
 		List<Product> list = load.getAllProduct();
-		
-		for (Product p : list) {
-			System.out.println(p);
-		}
-		List<Category> listCat = load.getAllCategory();
-		
-		for (Category c : listCat) {
-			System.out.println(c);
-		}
+		boolean a = load.isPublicKeyExists("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2j1vDlH2AhhjoTQFTy+KwJKmthMviVVk3OqCnqnLJKxoY/yCggZG2W5xQItQjIGjOs4Dk0hrBx7R9XHZ/6ikhwBaEY2IgY/6gdrmufgNxTWFWVVLHrzpT5Lg+xwlOsoh9NsYwndLZe6RjA1ekLTAWu4xCDDT7d4BEAANYE4H5KHmK/K3swuqY1Omirko49gwXQfnTZOF/+WVwtC3SA9zgLACXTpCz0uVfLfnF3YbAPdxt+TWSAbtvB+dFqlzy9fHvW8UfPcaaxUpT4XV2M+9sNRWNR9wPs8Fz7dhqyfw14zc6uQFHMziYohMY7r0E0WNr6RoEa4SQJcZ3wIM1muurQIDAQAB");
+
+		System.out.println(a);
+		//		for (Product p : list) {
+//			System.out.println(p);
+//		}
+//		List<Category> listCat = load.getAllCategory();
+//
+//		for (Category c : listCat) {
+//			System.out.println(c);
+//		}
 	}
 
 	

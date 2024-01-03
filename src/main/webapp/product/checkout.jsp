@@ -250,13 +250,14 @@
 										</div>
 								</div>
 								<div class="dialog">
+
 									<p class="dialong__title">Xác nhận</p>
 									<div class="dialog__main">
 										<p class="dialog__text">Bạn có muốn thanh toán?</p>
 										<button class="dialog__btn " type="button">Hủy</button>
 										<button class="dialog__btn dialog__btn-ok" type="submit">Đồng ý</button>
 									</div>
-								</div>
+								</div>-->
 							</div>
 							<!-- billing-details-wrap end -->
 						</div>
@@ -416,25 +417,24 @@
 </script>
 
 <script>
-	document.getElementById("image").addEventListener("change", function() {
-		var preview = document.getElementById("preview");
-		var file = this.files[0];
+        document.getElementById("image").addEventListener("change", function() {
+            var preview = document.getElementById("preview");
+            var file = this.files[0];
 
-		if (file) {
-			var reader = new FileReader();
+            if (file) {
+                var reader = new FileReader();
 
-			reader.addEventListener("load", function() {
-				preview.style.display = "block";
-				preview.src = reader.result;
-			});
+                reader.addEventListener("load", function() {
+                    preview.style.display = "block";
+                    preview.src = reader.result;
+                });
 
-			reader.readAsDataURL(file);
-		} else {
-			preview.style.display = "none";
-		}
-	});
-</script>
-
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = "none";
+            }
+        });
+    </script>
 </body>
 
 <!-- Mirrored from template.hasthemes.com/ruiz/ruiz/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:50:36 GMT -->
