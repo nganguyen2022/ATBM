@@ -1,6 +1,7 @@
 ﻿create database WEBCLOTHES;
- use WEBCLOTHES;
 
+USE WEBCLOTHES;
+-- Bảng Danh mục
 CREATE TABLE USERS (
                        id INT AUTO_INCREMENT PRIMARY KEY,
                        fullname NVARCHAR(100),
@@ -21,6 +22,8 @@ CREATE TABLE USERKEYS (
                           key_status INT
 );
 
+drop table USERS;
+update USERS set isUser=0  where id =3;
 CREATE TABLE CATEGORIES (cateId CHAR(5) NOT NULL PRIMARY KEY,
                          cateName NVARCHAR(50) NOT NULL );
 
@@ -30,6 +33,7 @@ CREATE TABLE PRODUCT (pId CHAR(5) NOT NULL PRIMARY KEY,
                       pDescription NVARCHAR(200),
                       cateId CHAR(5) REFERENCES CATEGORIES(cateId) ,
                       img NVARCHAR(500));
+
 create table OrderProduct( idOrder varchar(5) PRIMARY KEY ,
                            nameAcc nvarchar(50) ,
                            dateOrder nvarchar(50),
@@ -40,8 +44,10 @@ create table OrderProduct( idOrder varchar(5) PRIMARY KEY ,
                            address nvarchar(100),
                            note nvarchar(500),
                            checkout nvarchar(500),
-                           status int
+                           status int,
+                           signature text
 );
+drop table orderProduct;
 create table DetailOrder(idOrder varchar(5) references OrderProduct(idOrder),
                          pId char(5) REFERENCES Product(pId),
                          amount int,
@@ -50,7 +56,23 @@ create table DetailOrder(idOrder varchar(5) references OrderProduct(idOrder),
 );
 create table Views(pId char(5)references Product(pId),
                    view_count int);
+
+CREATE TABLE Report(id int auto_increment primary key,
+                    timeR timestamp,
+                    userName nvarchar(50) references Users(userName),
+                    fullName nvarchar(100),
+                    email nvarchar(50),
+                    phone varchar(10),
+                    descriptionR text,
+                    status int);
+drop table Report;
+drop table OrderProduct;
+select * from report;
+select * from OrderProduct;
+select * from DetailOrder;
+
 INSERT INTO USERS VALUES (2,'Nguyễn Văn Dẫn','dan','dan@gmail.com','0384374241','Dĩ An, Bình Dương','dan001', 0);
+
 INSERT INTO CATEGORIES VALUES ('AN', N'Áo nam');
 INSERT INTO CATEGORIES VALUES ('NU', N'Áo nữ');
 INSERT INTO CATEGORIES VALUES ('P', N'Áo Polo');
@@ -132,10 +154,14 @@ INSERT INTO PRODUCT VALUES ('AK7', N'Áo khoác nữ màu nâu', 215.000, N'Ch�
 -- 38
 INSERT INTO PRODUCT VALUES ('AK8', N'Áo khoác nữ jeans', 145.000, N'Chất liệu vải jeans, chắc chắn, .','AK', 'http://localhost:8080/WebBanAo/images/ak8.jpg');
 
+SELECT * FROM PRODUCT
+WHERE pId = 'AN10';
 
+SELECT * FROM USERS
+WHERE userName = 'dan' and upassword = 'dan001';
+select * from userkeys;
 
+INSERT INTO USERS VALUES('hen', 'hen001', 'hen@gmail.com', 1);
 
-
-
-
+INSERT INTO PRODUCT(pId, pName, price, pDescription, cateId, img) VALUES ('AK9', N'Áo khoác jeans', 145.000, N'Chất liệu vải jeans, chắc chắn, .','AK', 'http://localhost:8080/WebBanAo/images/ak9.jpg');
 

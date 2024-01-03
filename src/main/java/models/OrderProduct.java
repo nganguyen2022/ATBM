@@ -30,7 +30,7 @@ public class OrderProduct {
 		this.note = note;
 		this.checkout = checkout;
 		this.status = status;
-		this.signature=signature;
+		this.signature = signature;
 	}
 
 	public String getIdOrder() {

@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,31 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import conn.OrderDAO;
+import conn.ReportDAO;
 import models.OrderProduct;
+import models.Report;
 import models.User;
 
-/**
- * Servlet implementation class DetailUser
- */
 @WebServlet("/DetailUser")
 public class DetailUser extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public DetailUser() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
             User tk = (User) session.getAttribute("user");
+            response.setCharacterEncoding("UTF-8");
 
             // Kiểm tra xem tk có null hay không
             if (tk != null) {
@@ -44,21 +39,21 @@ public class DetailUser extends HttpServlet {
                 request.setAttribute("donHang", dh);
                 System.out.println("Đơn hàng : " + dh);
 
+                ReportDAO dao = new ReportDAO();
+                List<Report> reports = dao.getReportByUserName(tk.getUname());
+                request.setAttribute("report", reports);
+
                 request.getRequestDispatcher("/product/my-account.jsp").forward(request, response);
             } else {
                 response.sendRedirect("/login.jsp");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
-
 }

@@ -1,29 +1,14 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page isELIgnored="false"%>
 <!doctype html>
-<html class="no-js" lang="en">
+<html>
 
-
-<!-- Mirrored from template.hasthemes.com/ruiz/ruiz/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:50:35 GMT -->
-
-
-<!-- Mirrored from ruizzz.tk/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Nov 2022 09:21:32 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
-    <meta charset="utf-8">
-    <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    <meta charset="UTF-8">
+    <%@ page language="java" contentType="text/html; charset=UTF-8"
+             pageEncoding="UTF-8"%>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-    <%--  <fmt:setLocale value="vi_VN"/> --%>
-    <c:set var="lg" value="${sessionScope.language}"></c:set>
-    <c:if test="${lg eq 'US' }">
-        <fmt:setLocale value="en_US"/>
-    </c:if>
-    <c:if test="${lg eq 'VN' || lg == null }">
-        <fmt:setLocale value="vi_VN"/>
-    </c:if>
-    <fmt:setBundle basename="app" var="language"/>
+    <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
     <title>Thông tin cá nhân</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
@@ -35,18 +20,17 @@
 	============================================ -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/vendor/bootstrap.min.css">
     <!-- Icon Font CSS -->
-    <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/vendor/simple-line-icons.css">
+    <link rel="stylesheet" href="./assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/vendor/simple-line-icons.css">
 
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="assets/css/plugins/animation.css">
-    <link rel="stylesheet" href="assets/css/plugins/slick.css">
-    <link rel="stylesheet" href="assets/css/plugins/animation.css">
-    <link rel="stylesheet" href="assets/css/plugins/nice-select.css">
-    <link rel="stylesheet" href="assets/css/plugins/fancy-box.css">
-    <link rel="stylesheet" href="assets/css/plugins/jqueryui.min.css">
+    <link rel="stylesheet" href="./assets/css/plugins/slick.css">
+    <link rel="stylesheet" href="./assets/css/plugins/animation.css">
+    <link rel="stylesheet" href="./assets/css/plugins/nice-select.css">
+    <link rel="stylesheet" href="./assets/css/plugins/fancy-box.css">
+    <link rel="stylesheet" href="./assets/css/plugins/jqueryui.min.css">
 
     <!-- Vendor & Plugins CSS (Please remove the comment from below vendor.min.css & plugins.min.css for better website load performance and remove css files from avobe) -->
     <!--
@@ -55,15 +39,82 @@
     -->
 
     <!-- Main Style CSS (Please use minify version for better website load performance) -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <!--<link rel="stylesheet" href="assets/css/style.min.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/grid.css">
-    <link rel="stylesheet" href="../assets/css/rebonsive.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+<%--    <link rel="stylesheet" href="../assets/css/base.css">--%>
+<%--    <link rel="stylesheet" href="../assets/css/grid.css">--%>
+    <link rel="stylesheet" href="./assets/css/rebonsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+        body{background-color: #eeeeee;font-family: 'Open Sans',serif}
+
+        .card{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 0.10rem}
+        .card-header:first-child{border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0}.card-header{padding: 0.75rem 1.25rem;margin-bottom: 0;background-color: #fff;border-bottom: 1px solid rgba(0, 0, 0, 0.1)}.track{position: relative;background-color: #ddd;height: 7px;display: -webkit-box;display: -ms-flexbox;display: flex;margin-bottom: 60px;margin-top: 50px}.track .step{-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;width: 25%;margin-top: -18px;text-align: center;position: relative}.track .step.active:before{background: #FF5722}.track .step::before{height: 7px;position: absolute;content: "";width: 100%;left: 0;top: 18px}.track .step.active .icon{background: #ee5435;color: #fff}.track .icon{display: inline-block;width: 40px;height: 40px;line-height: 40px;position: relative;border-radius: 100%;background: #ddd}.track .step.active .text{font-weight: 400;color: #000}.track .text{display: block;margin-top: 7px}.itemside{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;width: 100%}.itemside .aside{position: relative;-ms-flex-negative: 0;flex-shrink: 0}.img-sm{width: 80px;height: 80px;padding: 7px}ul.row, ul.row-sm{list-style: none;padding: 0}.itemside .info{padding-left: 15px;padding-right: 7px}.itemside .title{display: block;margin-bottom: 5px;color: #212529}p{margin-top: 0;margin-bottom: 1rem}.btn-warning{color: #ffffff;background-color: #ee5435;border-color: #ee5435;border-radius: 1px}.btn-warning:hover{color: #ffffff;background-color: #ff2b00;border-color: #ff2b00;border-radius: 1px}
+
+        .main-content-wrap {
+            background-color: #f9f9f9;
+            padding: 30px 0;
+        }
+
+        .dashboard-upper-info {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .dashboard-content {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .dashboard-list {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .dashboard-list a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dashboard-list a:hover {
+            background-color: #ddd;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn.default-btn {
+            color: #fff;
+            background-color: #ee5435;
+        }
+
+        .btn.default-btn:hover {
+            background-color: #ff2b00;
+        }
+    </style>
 </head>
 
 <body>
@@ -76,8 +127,7 @@
                 <div class="col-12">
                     <!-- breadcrumb-list start -->
                     <ul class="breadcrumb-list">
-                        <li class="breadcrumb-item">Trang chủ</li>
-                        <li class="breadcrumb-item active">Thông tin tài khoản</li>
+                        <li class="breadcrumb-item">Trang chủ / Thông tin tài khoản</li>
                     </ul>
                     <!-- breadcrumb-list end -->
                 </div>
@@ -97,7 +147,7 @@
                             <div class="row align-items-center no-gutters">
                                 <div class="col-lg-3 col-md-12">
                                     <div class="d-single-info" style="height: 60px;padding: 20px 0 20px;">
-                                        <p class="user-name">Hello<span> ${sessionScope.user.fullName}</span></p>
+                                        <p class="user-name">Xin chào<span> ${sessionScope.user.fullName}</span></p>
                                     </div>
                                 </div>
 
@@ -109,11 +159,10 @@
                                 <ul role="tablist" class="nav flex-column dashboard-list">
                                     <li><a href="#dashboard" data-bs-toggle="tab" class="nav-link active">Quản lý</a></li>
                                     <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Thông tin cá nhân</a></li>
-                                    <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Đơn hàng</a>
-                                    </li>
-                                    <li><a href="/WebBanHang/changePass.jsp" class="nav-link">Thay đổi mật khẩu</a></li>
-
-                                    <li><a href="../Login.jsp" class="nav-link">Đăng xuất</a></li>
+                                    <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Đơn hàng</a></li>
+                                    <li><a href="/product/report.jsp" class="nav-link">Yêu cầu</a></li>
+                                    <li><a href="#listreport" data-bs-toggle="tab" class="nav-link">Danh sách yêu cầu</a></li>
+                                    <li><a href="/LogoutServlet" class="nav-link">Đăng xuất</a></li>
                                 </ul>
                             </div>
                             <div class="col-md-12 col-lg-10">
@@ -126,14 +175,14 @@
 
                                             <div class="d111 col-md-4">
                                                 <h6>Thông tin cá nhân <span class="sp111"></span></h6>
-                                                <p>${sessionScope.user.userName}</p>
+                                                <p>${sessionScope.user.uname}</p>
                                                 <p>${sessionScope.user.email}</p>
                                                 <p>${sessionScope.user.fullName}</p>
                                             </div>
                                             <div class="d111 col-md-8 "
                                                  style="border-left: rgb(255, 255, 255) 10px solid ;">
                                                 <h6>Địa chỉ đặt hàng <span class="sp111"></span></h6>
-                                                <p>${sessionScope.user.userName}</p>
+                                                <p>${sessionScope.user.uname}</p>
                                                 <p>(+84) ${sessionScope.user.phone}</p>
                                                 <p>${sessionScope.user.address}</p>
                                             </div>
@@ -172,7 +221,7 @@
                                                             <td>${dh.totalMoney}00 đ</td>
                                                             <td><a href="/product/DetailOder?maDH=${dh.idOrder}" class="view">
                                                                 Theo dõi</a></td>
-                                                            <td><a href="/product/DetailOder?maDH=${dh.idOrder}" style="background-color: red" class="view">
+                                                            <td><a href="/product/DetailOder?maDH=${dh.idOrder}" class="view">
                                                                 Hủy</a></td>
                                                         </c:if>
 
@@ -280,6 +329,41 @@
                                             </table>
                                         </div>
                                     </div>
+
+                                    <div class="tab-pane fade" id="listreport">
+                                        <h3>Danh sách yêu cầu</h3>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Nội dung</th>
+                                                    <th>Trạng thái</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <c:set var="count" value="0"></c:set>
+                                                <c:forEach var="re" items="${report}">
+                                                    <tr>
+                                                        <c:set var="count" value="${count + 1 }"></c:set>
+                                                        <td>${count}</td>
+                                                        <td>${re.time}</td>
+                                                        <td>${re.description}</td>
+                                                        <c:set var="duyet" value="${re.status}"></c:set>
+                                                        <c:if test="${duyet == '1' }">
+                                                            <td>Chưa được xử lý</td>
+                                                        </c:if>
+                                                        <c:if test="${duyet == '0' }">
+                                                            <td>Đã được xử lý</td>
+                                                        </c:if>
+                                                    </tr>
+                                                </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -298,43 +382,31 @@
 ============================================ -->
 
     <!-- Modernizer JS -->
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="../product/assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <!-- jquery -->
 
     <!-- jquery -->
-    <script src="assets/js/vendor/jquery-3.5.1.min.js"></script>
-    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="../product/assets/js/vendor/jquery-3.5.1.min.js"></script>
+    <script src="../product/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
 
 
     <!-- Bootstrap JS -->
-    <script src="assets/js/vendor/popper.min.js"></script>
-    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="../product/assets/js/vendor/popper.min.js"></script>
+    <script src="../product/assets/js/vendor/bootstrap.min.js"></script>
 
     <!-- Plugins JS -->
-    <script src="assets/js/plugins/slick.min.js"></script>
+    <script src="../product/assets/js/plugins/slick.min.js"></script>
 
-    <script src="assets/js/plugins/jquery.nice-select.min.js"></script>
-    <script src="assets/js/plugins/countdown.min.js"></script>
-    <script src="assets/js/plugins/image-zoom.min.js"></script>
-    <script src="assets/js/plugins/fancybox.js"></script>
-    <script src="assets/js/plugins/scrollup.min.js"></script>
-    <script src="assets/js/plugins/jqueryui.min.js"></script>
-    <script src="assets/js/plugins/ajax-contact.js"></script>
-
-    <!-- Vendor & Plugins JS (Please remove the comment from below vendor.min.js & plugins.min.js for better website load performance and remove js files from avobe) -->
-    <!--
-<script src="assets/js/vendor/vendor.min.js"></script>
-<script src="assets/js/plugins/plugins.min.js"></script>
--->
-
+    <script src="../product/assets/js/plugins/jquery.nice-select.min.js"></script>
+    <script src="../product/assets/js/plugins/countdown.min.js"></script>
+    <script src="../product/assets/js/plugins/image-zoom.min.js"></script>
+    <script src="../product/assets/js/plugins/fancybox.js"></script>
+    <script src="../product/assets/js/plugins/scrollup.min.js"></script>
+    <script src="../product/assets/js/plugins/jqueryui.min.js"></script>
+    <script src="../product/assets/js/plugins/ajax-contact.js"></script>
     <!-- Main JS -->
-    <script src="assets/js/main.js"></script>
+    <script src="./assets/js/main.js"></script>
 
 </body>
-
-
-<!-- Mirrored from template.hasthemes.com/ruiz/ruiz/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:50:35 GMT -->
-
-
 <!-- Mirrored from ruizzz.tk/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Nov 2022 09:21:32 GMT -->
 </html>

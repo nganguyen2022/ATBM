@@ -15,6 +15,13 @@ public class Keys {
         this.status = status;
     }
 
+    public Keys(String userID, String publicKey, String date_time, int status){
+        this.userID = userID;
+        this.publicKey = publicKey;
+        this.date_time = date_time;
+        this.status = status;
+    }
+
     public int getKeyID() {
         return keyID;
     }

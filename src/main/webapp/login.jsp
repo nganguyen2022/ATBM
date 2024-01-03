@@ -30,7 +30,7 @@
 </head>
 <body>
 <!-- Header Section Begin -->
-<c:import url="header/header.jsp" />
+<c:import url="/header/header.jsp" />
 <!-- Header Section End -->
 <!-- From login -->
 <section class="login py-5 border-top-1">
@@ -47,7 +47,7 @@
             <fieldset class="p-4">
               <p class="text-danger">${massage }</p>
               <label><b>Tên đăng nhập*</b></label>
-              <input name="uname" type="text" placeholder="Tên đăg nhập" class="border p-3 w-100 my-2"  required="required">
+              <input name="uname" type="text" placeholder="Tên đăng nhập" class="border p-3 w-100 my-2"  required="required">
               <label><b>Mật khẩu*</b></label>
               <input name="pass" type="password" placeholder="Mật khẩu" class="border p-3 w-100 my-2" required="required">
               <div class="loggedin-forgot">

@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import conn.AccountDAO;
 import conn.Load;
+import models.Keys;
 import models.User;
 
 /**
@@ -52,14 +54,18 @@ public class EditUser extends HttpServlet {
         String email = request.getParameter("uEmail");
         String address = request.getParameter("uAddress");
         int isUser = Integer.parseInt(request.getParameter("role"));
+        String publicKey = request.getParameter("publicKey");
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        String date_time = String.valueOf(time);
 
         if (!rePass.equals(upassword)){
             request.setAttribute("error", "Mật khẩu không khớp.");
         }
-
+        User user = new User(fullName, userName, email, phone, address, upassword, isUser);
+        Keys key = new Keys(userName, publicKey, date_time, 1);
         AccountDAO acc = new AccountDAO();
 
-        acc.editUser(fullName, userName, email, phone, address, upassword, isUser);
+        acc.update(user, key);
 
         getServletContext().getRequestDispatcher("/admin/manage?loai=user").forward(request, response);
     }

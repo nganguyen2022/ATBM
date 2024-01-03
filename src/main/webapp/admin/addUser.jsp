@@ -11,8 +11,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="../admin/css/sb-admin-2.min.css" rel="stylesheet">
 
 <title>Brother Admin - Dashboard</title>
 
@@ -48,7 +47,7 @@
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="email">Tên tài khoản*:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="pwd" name="userName"
+											<input type="text" class="form-control" name="userName"
 												placeholder="Nhập tên tài khoản">
 										</div>
 										<label class="control-label col-sm-4" style="color: red" for="email">${erorr.duplicateUserName}${erorr.NoUserName}</label>
@@ -57,7 +56,7 @@
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Mật khẩu*:</label>
 										<div class="col-sm-10">
-											<input type="password" class="form-control" id="pwd" name="upassword"
+											<input type="password" class="form-control" name="upassword"
 												placeholder="Nhập mật khẩu">
 										</div>
 										<label class="control-label col-sm-4" style="color: red" for="email">${erorr.NoPas}</label>
@@ -65,7 +64,7 @@
 									<div class="form-group">
 										<label class="control-label col-sm-3" for="pwd">Nhập lại mật khẩu*:</label>
 										<div class="col-sm-10">
-											<input type="password" class="form-control" id="pwd" name="repass"
+											<input type="password" class="form-control" name="repass"
 												placeholder="Nhập lại mật khẩu">
 										</div>
 										<label class="control-label col-sm-4"  style="color: red"  for="email">${erorr.erorrRepass}</label>
@@ -73,28 +72,28 @@
 									<div class="form-group">
 										<label class="control-label col-sm-3" for="pwd">Họ và tên khách hàng:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="pwd" name="fullName"
+											<input type="text" class="form-control" name="fullName"
 							 				placeholder="Nhập họ và tên">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Số điện thoại:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="pwd" name="phone"
+											<input type="text" class="form-control" name="phone"
 												placeholder="Nhập số điện thoại">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Email:</label>
 										<div class="col-sm-10">
-											<input type="email" class="form-control" id="pwd" name="email"
+											<input type="email" class="form-control" name="email"
 												placeholder="Nhập email">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Địa chỉ:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="pwd" name="address"
+											<input type="text" class="form-control" name="address"
 												placeholder="Nhập địa chỉ">
 										</div>
 									</div>
@@ -180,21 +179,15 @@
 	</div>
 
 	<!-- Bootstrap core JavaScript-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="../admin/vendor/jquery/jquery.min.js"></script>
+	<script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="js/sb-admin-2.min.js"></script>
+	<script src="../admin/js/sb-admin-2.min.js"></script>
 
-	<!-- Page level plugins -->
-	<script src="vendor/chart.js/Chart.min.js"></script>
-
-	<!-- Page level custom scripts -->
-	<script src="js/demo/chart-area-demo.js"></script>
-	<script src="js/demo/chart-pie-demo.js"></script>
 	<script>
 		function toggleKeyFields(checkbox) {
 			var keyCheckboxes = document.querySelectorAll('.key-checkbox');

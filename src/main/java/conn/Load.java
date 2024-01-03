@@ -78,7 +78,7 @@ public class Load {
 					list.add(new Category(rs.getString(1), rs.getString(2)));
 
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 
 			return list;

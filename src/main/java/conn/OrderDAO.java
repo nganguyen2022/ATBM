@@ -82,7 +82,9 @@ public class OrderDAO implements ObjectDAO {
 		OrderProduct donHang = (OrderProduct) obj;
 		mapDonHang.replace(id, donHang);
 		try {
-			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?,nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
+			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?," +
+					"nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
+
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,donHang.getNameAcc());
@@ -146,7 +148,6 @@ public class OrderDAO implements ObjectDAO {
 						rs.getString(10),
 						rs.getString(11),
 						rs.getString(12)
-
 				);
 				list.add(sp);
 			}
