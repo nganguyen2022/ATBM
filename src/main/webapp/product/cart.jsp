@@ -73,8 +73,6 @@
     <div class="main-wrapper">
 
         <!--  Header Start -->
-
-            
             <!-- breadcrumb-area start -->
             <div class="breadcrumb-area"  style="margin-top: var(--header-height)">
                 <div class="container">

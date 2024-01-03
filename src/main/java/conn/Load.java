@@ -78,7 +78,7 @@ public class Load {
 					list.add(new Category(rs.getString(1), rs.getString(2)));
 
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 
 			return list;
@@ -245,6 +245,24 @@ public class Load {
 		try (PrintWriter writer = new PrintWriter(filePath)) {
 			writer.write(privateKey);
 		}
+	}
+	public boolean isPublicKeyExists(String publicKey) {
+
+		// Prepare the SQL statement
+		String query = "SELECT COUNT(*) FROM USERKEYS WHERE publicKey = ?";
+		try (PreparedStatement statement = conn.prepareStatement(query)) {
+			statement.setString(1, publicKey);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				if (resultSet.next()) {
+					int count = resultSet.getInt(1);
+					return count > 0; // If count > 0, the key already exists
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return false;
 	}
 		// xóa sản phẩm
 		public void deleteProduct(String pId) {

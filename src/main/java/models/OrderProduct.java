@@ -1,4 +1,7 @@
 package models;
+
+import java.util.List;
+
 public class OrderProduct {
 	private String idOrder;
 	private String nameAcc;
@@ -11,9 +14,10 @@ public class OrderProduct {
 	private String note;
 	private String checkout;
 	private String status;
+	private String signature;
 
 	public OrderProduct(String idOrder, String nameAcc, String dateOrder, String dateDelivery, String totalMoney, String phone,
-						String nameRecipient, String address, String note, String checkout, String status) {
+						String nameRecipient, String address, String note, String checkout, String status, String signature) {
 		super();
 		this.idOrder = idOrder;
 		this.nameAcc = nameAcc;
@@ -26,6 +30,7 @@ public class OrderProduct {
 		this.note = note;
 		this.checkout = checkout;
 		this.status = status;
+		this.signature = signature;
 	}
 
 	public String getIdOrder() {
@@ -116,6 +121,35 @@ public class OrderProduct {
 		this.status = status;
 	}
 
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	//lay du lieu trong don hang va chi tiet don hang
+	public String getDataInitSignature(List<DetailOrder> items){
+		items.sort(((o1, o2) -> Double.compare(o2.getPrice(), o1.getPrice())));
+		String data = "OrderProduct{" +
+				"idOrder='" + idOrder + '\'' +
+				", nameAcc='" + nameAcc + '\'' +
+				", dateOrder='" + dateOrder + '\'' +
+				", dateDelivery='" + dateDelivery + '\'' +
+				", totalMoney='" + totalMoney + '\'' +
+				", phone='" + phone + '\'' +
+				", nameRecipient='" + nameRecipient + '\'' +
+				", address='" + address + '\'' +
+				", note='" + note + '\'' +
+				", checkout='" + checkout + '\'' +
+				'}';
+		for(DetailOrder tmp: items){
+			data += tmp.toString();
+		}
+		return data;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderProduct{" +
@@ -130,6 +164,7 @@ public class OrderProduct {
 				", note='" + note + '\'' +
 				", checkout='" + checkout + '\'' +
 				", status='" + status + '\'' +
+				", signature='" + signature + '\'' +
 				'}';
 	}
 }

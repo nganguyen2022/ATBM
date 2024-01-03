@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import conn.AccountDAO;
 import conn.Load;
+import models.Keys;
 import models.User;
 
 /**
@@ -44,15 +46,17 @@ public class AddUser extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String publicKey = request.getParameter("publicKey");
-        String privateKey = request.getParameter("privateKey");
         String isUserParam = request.getParameter("isUser");
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        String date_time = String.valueOf(time);
         int isUser = 1;
         if (isUserParam != null && !isUserParam.isEmpty()) {
             isUser = Integer.parseInt(isUserParam);
         }
 
         User user = new User(fullName, userName, email, phone, address, upassword, isUser);
-        acc.add(user);
+        Keys key = new Keys(userName, publicKey, date_time, 1);
+        acc.add(user, key);
         request.getRequestDispatcher("/admin/manage?loai=user").forward(request, response);
     }
 

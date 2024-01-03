@@ -56,7 +56,7 @@ public class DuyetXoaXemDonHang extends HttpServlet {
 				OrderProduct dh = dhDAO.mapDonHang.get(maDH);
 //				Log log = new Log(Log.ALERT,tkLogin.getNameAcc(),src,"Order browsing: " +dh,1);
 //				new LogDAO().add(log);
-				OrderProduct dhNew = new OrderProduct(maDH, dh.getNameAcc(), dh.getDateOrder(),dh.getDateDelivery(), dh.getTotalMoney(), dh.getPhone(), dh.getNameRecipient(), dh.getAddress(), dh.getNote(), dh.getCheckout(), "1");
+				OrderProduct dhNew = new OrderProduct(maDH, dh.getNameAcc(), dh.getDateOrder(),dh.getDateDelivery(), dh.getTotalMoney(), dh.getPhone(), dh.getNameRecipient(), dh.getAddress(), dh.getNote(), dh.getCheckout(), "1", dh.getSignature());
 				dhDAO.edit(maDH, dhNew);
 				request.getRequestDispatcher("/admin/manage?loai=oder").forward(request, response);
 			}else if(chucNang.equals("Xem")){

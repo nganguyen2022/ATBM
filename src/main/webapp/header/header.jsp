@@ -61,7 +61,7 @@
             </c:if>
             <c:if test="${sessionScope.user != null}">
               <div class="header__top__right__auth">
-                <a href="LogoutServlet"><i class="fa fa-power-off"></i>
+                <a href="/LogoutServlet"><i class="fa fa-power-off"></i>
                   Đăng xuất</a>
               </div>
             </c:if>
@@ -94,12 +94,20 @@
         </nav>
       </div>
       <div class="col-lg-3">
+        <a href="<c:url value="/product/cart.jsp"></c:url>">
         <div class="header__cart">
-          <ul>
-            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span></span></a></li>
-          </ul>
-
+          <div class="header__cart-wrap ">
+            <i class="fa fa-shopping-bag"></i>
+            <c:set var="size" value="${sizeCart}"></c:set>
+            <c:if test="${size !=null }">
+              <span class="header__cart-notice">${size}</span>
+            </c:if>
+            <c:if test="${size ==null }">
+              <span class="header__cart-notice">0</span>
+            </c:if>
+                  </div>
         </div>
+        </a>
       </div>
     </div>
     <div class="humberger__open">

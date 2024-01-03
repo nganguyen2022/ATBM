@@ -32,16 +32,6 @@ public class AddProServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		Load load = new Load();
@@ -53,12 +43,23 @@ public class AddProServlet extends HttpServlet {
 		String description = request.getParameter("description");
 		String cate = request.getParameter("cate");
 
-		List<Category> listCat = load.getAllCategory();
-		request.setAttribute("listCate", listCat);
+		List<Category> listC = load.getAllCategory();
+		// set data to jsp
+		request.setAttribute("listCat", listC);
 
 		load.insertProduct(id, name, price, description, cate,img);
 		request.getRequestDispatcher("/admin/manage?loai=product").forward(request, response);
+	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

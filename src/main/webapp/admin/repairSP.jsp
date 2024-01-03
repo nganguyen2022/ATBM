@@ -87,7 +87,7 @@
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Mô tả:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="pwd" value="${detail.descripsion}"
+											<input type="text" class="form-control" id="pwd" value="${detail.description}"
 												name="edes" placeholder="Nhập mô tả">
 										</div>
 									</div>

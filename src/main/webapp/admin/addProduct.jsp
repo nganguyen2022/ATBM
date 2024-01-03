@@ -14,8 +14,9 @@
 <meta name="author" content="">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="../admin/css/sb-admin-2.min.css" rel="stylesheet">
 
-<title>Brother Admin - Dashboard</title>
+<title>DHStore Admin - Dashboard</title>
 
 <!-- Custom fonts for this template-->
 
@@ -81,7 +82,7 @@
 										<label class="control-label col-sm-2" for="pwd">Ảnh
 											sản phẩm:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control
+											<input type="text" class="form-control"
 												   name="img" placeholder="Nhập tên ảnh">
 										</div>
 									</div>
@@ -95,7 +96,7 @@
 									<div class="form-group">
 										<label>Danh mục</label> <select name="cate"
 																		class="form-select" aria-label="Default select example">
-										<c:forEach items="${listCate}" var="c">
+										<c:forEach items="${listCat}" var="c">
 											<option value="${c.cID}">${c.cName}</option>
 										</c:forEach>
 									</select>
@@ -108,9 +109,6 @@
 								</form>
 							</div>
 						</div>
-
-
-
 					</div>
 				</div>
 				<!-- /.container-fluid -->
@@ -152,22 +150,14 @@
 	</div>
 
 	<!-- Bootstrap core JavaScript-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="../admin/vendor/jquery/jquery.min.js"></script>
+	<script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="js/sb-admin-2.min.js"></script>
-
-	<!-- Page level plugins -->
-	<script src="vendor/chart.js/Chart.min.js"></script>
-
-	<!-- Page level custom scripts -->
-	<script src="js/demo/chart-area-demo.js"></script>
-	<script src="js/demo/chart-pie-demo.js"></script>
-
+	<script src="../admin/js/sb-admin-2.min.js"></script>
 
 </body>
 

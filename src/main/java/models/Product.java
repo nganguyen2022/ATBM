@@ -6,15 +6,15 @@ public class Product {
 	private String pID;
 	private String pName;
 	private float price;
-	private String descripsion;
+	private String description;
 	private String catID;
 	private String img;
-	public Product(String pID, String pName, float price, String descripsion, String catID, String img) {
+	public Product(String pID, String pName, float price, String description, String catID, String img) {
 		super();
 		this.pID = pID;
 		this.pName = pName;
 		this.price = price;
-		this.descripsion = descripsion;
+		this.description = description;
 		this.catID = catID;
 		this.img = img;
 	}
@@ -36,11 +36,11 @@ public class Product {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	public String getDescripsion() {
-		return descripsion;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescripsion(String descripsion) {
-		this.descripsion = descripsion;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public String getCatID() {
 		return catID;
@@ -61,7 +61,7 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "Product [pID=" + pID + ", pName=" + pName + ", price=" + price + ", descripsion=" + descripsion
+		return "Product [pID=" + pID + ", pName=" + pName + ", price=" + price + ", description=" + description
 				+ ", catID=" + catID + ", img=" + img + "]";
 	}
 	

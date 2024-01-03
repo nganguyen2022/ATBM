@@ -65,6 +65,110 @@
 	<link rel="stylesheet" href="../assets/css/rebonsive.css">
 	<link rel="stylesheet"
 		  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+	<style>
+		.dialog {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: white;
+			padding: 20px;
+			border: 1px solid #ccc;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			z-index: 999;
+		}
+	</style>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+		body{background-color: #eeeeee;font-family: 'Open Sans',serif}
+
+		.card{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 0.10rem}
+		.card-header:first-child{border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0}.card-header{padding: 0.75rem 1.25rem;margin-bottom: 0;background-color: #fff;border-bottom: 1px solid rgba(0, 0, 0, 0.1)}.track{position: relative;background-color: #ddd;height: 7px;display: -webkit-box;display: -ms-flexbox;display: flex;margin-bottom: 60px;margin-top: 50px}.track .step{-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;width: 25%;margin-top: -18px;text-align: center;position: relative}.track .step.active:before{background: #FF5722}.track .step::before{height: 7px;position: absolute;content: "";width: 100%;left: 0;top: 18px}.track .step.active .icon{background: #ee5435;color: #fff}.track .icon{display: inline-block;width: 40px;height: 40px;line-height: 40px;position: relative;border-radius: 100%;background: #ddd}.track .step.active .text{font-weight: 400;color: #000}.track .text{display: block;margin-top: 7px}.itemside{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;width: 100%}.itemside .aside{position: relative;-ms-flex-negative: 0;flex-shrink: 0}.img-sm{width: 80px;height: 80px;padding: 7px}ul.row, ul.row-sm{list-style: none;padding: 0}.itemside .info{padding-left: 15px;padding-right: 7px}.itemside .title{display: block;margin-bottom: 5px;color: #212529}p{margin-top: 0;margin-bottom: 1rem}.btn-warning{color: #ffffff;background-color: #ee5435;border-color: #ee5435;border-radius: 1px}.btn-warning:hover{color: #ffffff;background-color: #ff2b00;border-color: #ff2b00;border-radius: 1px}
+	</style>
+	<style>
+	.btn-primary {
+	background-color: #FF5722;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	}
+
+	.btn-primary:hover {
+	background-color: #E64A19;
+	}
+
+	/* Style for form input fields */
+	input[type="text"] {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	}
+
+	/* Add this to your existing styles or create a new CSS file */
+
+	/* Style for Hóa đơn (Invoice) section */
+	.your-order-wrapper {
+		background-color: #f9f9f9;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+	}
+
+	.your-order-wrap {
+		margin-bottom: 20px;
+	}
+
+	.your-order-table table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 15px;
+	}
+
+	.your-order-table th, .your-order-table td {
+		border: 1px solid #ddd;
+		padding: 10px;
+		text-align: left;
+	}
+
+	.your-order-table th {
+		background-color: #f2f2f2;
+	}
+
+	.your-order-table tfoot {
+		font-weight: bold;
+	}
+
+	.payment-method {
+		margin-top: 20px;
+	}
+
+	.order-button-payment {
+		text-align: right;
+	}
+
+	.btn-checkOut {
+		background-color: #FF5722;
+		color: #fff;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.btn-checkOut:hover {
+		background-color: #E64A19;
+	}
+
+	/* Additional styles can be added as needed */
+
+
+	</style>
+
 </head>
 <body>
 <jsp:include page="/header/header.jsp"></jsp:include>
@@ -77,8 +181,7 @@
 				<div class="col-12">
 					<!-- breadcrumb-list start -->
 					<ul class="breadcrumb-list">
-						<li class="breadcrumb-item"><a href="">Trang chủ</a></li>
-						<li class="breadcrumb-item active">Thanh toán</li>
+						<li class="breadcrumb-item">Trang chủ / Thanh toán</li>
 					</ul>
 					<!-- breadcrumb-list end -->
 				</div>
@@ -105,7 +208,7 @@
 						<div class="col-lg-6 col-md-6">
 							<!-- billing-details-wrap start -->
 							<div class="billing-details-wrap">
-
+								<br>
 								<h3 class="shoping-checkboxt-title">Thanh toán</h3>
 								<div class="row">
 									<div class="col-lg-12">
@@ -138,6 +241,12 @@
 													placeholder="Hãy ghi chú cho đơn hàng của bạn"
 													rows="2" cols="5">
 											</p>
+										</div>
+								</div>
+								<div class="containera">
+										<div class="form-group">
+											<label for="prikey">Nhập private key của bạn:</label><br>
+											<input type="text" id="prikey" name="prikey" required>
 										</div>
 								</div>
 								<div class="dialog">
@@ -231,28 +340,28 @@
 <!-- JS
 ============================================ -->
 <!-- Modernizer JS -->
-<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="product/assets/js/vendor/modernizr-3.6.0.min.js"></script>
 <!-- jquery -->
 
 <!-- jquery -->
-<script src="assets/js/vendor/jquery-3.5.1.min.js"></script>
-<script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="product/assets/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="product/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
 
 
 <!-- Bootstrap JS -->
-<script src="assets/js/vendor/popper.min.js"></script>
-<script src="assets/js/vendor/bootstrap.min.js"></script>
+<script src="product/assets/js/vendor/popper.min.js"></script>
+<script src="product/assets/js/vendor/bootstrap.min.js"></script>
 
 <!-- Plugins JS -->
-<script src="assets/js/plugins/slick.min.js"></script>
+<script src="product/assets/js/plugins/slick.min.js"></script>
 
-<script src="assets/js/plugins/jquery.nice-select.min.js"></script>
-<script src="assets/js/plugins/countdown.min.js"></script>
-<script src="assets/js/plugins/image-zoom.min.js"></script>
-<script src="assets/js/plugins/fancybox.js"></script>
-<script src="assets/js/plugins/scrollup.min.js"></script>
-<script src="assets/js/plugins/jqueryui.min.js"></script>
-<script src="assets/js/plugins/ajax-contact.js"></script>
+<script src="product/assets/js/plugins/jquery.nice-select.min.js"></script>
+<script src="product/assets/js/plugins/countdown.min.js"></script>
+<script src="product/assets/js/plugins/image-zoom.min.js"></script>
+<script src="product/assets/js/plugins/fancybox.js"></script>
+<script src="product/assets/js/plugins/scrollup.min.js"></script>
+<script src="product/assets/js/plugins/jqueryui.min.js"></script>
+<script src="product/assets/js/plugins/ajax-contact.js"></script>
 
 
 
@@ -263,15 +372,32 @@
 -->
 
 <!-- Main JS -->
-<script src="assets/js/main.js"></script>
+<script src="product/assets/js/main.js"></script>
 <script>
-	var dialog = document.querySelector(".dialog");
-	var btnThanhToan = document.querySelector(".btn-checkOut")
+	// JavaScript code to handle the confirmation dialog
+	document.addEventListener("DOMContentLoaded", function () {
+		var dialog = document.querySelector(".dialog");
+		var btnThanhToan = document.querySelector(".btn-checkOut");
 
-	btnThanhToan.onclick = function () {
-		dialog.style.display = 'block'
+		btnThanhToan.onclick = function () {
+			// Show the dialog when the button is clicked
+			dialog.style.display = 'block';
+		};
 
-	}
+		// Add event listeners for the dialog buttons
+		var btnCancel = document.querySelector(".dialog__btn");
+		var btnConfirm = document.querySelector(".dialog__btn-ok");
+
+		btnCancel.onclick = function () {
+			// Hide the dialog when "Hủy" (Cancel) button is clicked
+			dialog.style.display = 'none';
+		};
+
+		btnConfirm.onclick = function () {
+			// Submit the form when "Đồng ý" (OK) button is clicked
+			document.forms[0].submit();
+		};
+	});
 </script>
 <script>
 	// Khi trang web được tải, đặt giá trị ngẫu nhiên cho trường idOrder
@@ -287,6 +413,26 @@
 		}
 		return result;
 	}
+</script>
+
+<script>
+	document.getElementById("image").addEventListener("change", function() {
+		var preview = document.getElementById("preview");
+		var file = this.files[0];
+
+		if (file) {
+			var reader = new FileReader();
+
+			reader.addEventListener("load", function() {
+				preview.style.display = "block";
+				preview.src = reader.result;
+			});
+
+			reader.readAsDataURL(file);
+		} else {
+			preview.style.display = "none";
+		}
+	});
 </script>
 
 </body>

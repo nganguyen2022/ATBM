@@ -1,9 +1,6 @@
 package conn;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +26,32 @@ public class AccountDAO implements ObjectDAO{
         // TODO Auto-generated constructor stub
     }
 
+    public static Keys getKeyByUser(String username){
+        try{
+            String query = "select * from userkeys where userID = ?";
+            Connection connect = new Connect().getconnecttion();
+            PreparedStatement stmt = connect.prepareStatement(query);
+            stmt.setString(1, username);
+            System.out.println(stmt.toString());
+            ResultSet rs= stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String user = rs.getString(2);
+                String pk = rs.getString(3);
+                String date = rs.getString(4);
+                int status = rs.getInt(5);
+                Keys key = new Keys(id,user,pk,date, status);
+                return key;
+            }
+            return null;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     private static Map<String, User> loadData() {
         Map<String, User> mapTemp = new HashMap<String, User>();
         try {
@@ -37,15 +60,13 @@ public class AccountDAO implements ObjectDAO{
             Statement stmt =  connect.createStatement();
             ResultSet rs= stmt.executeQuery(query);
             while (rs.next()) {
-                String fullName = rs.getString(1);
-                String userName = rs.getString(2);
-                String email = rs.getString(3);
-                String phone = rs.getString(4);
-                String address = rs.getString(5);
-                String pass = rs.getString(6);
-                String publicKey = rs.getString(7);
-                String privateKey = rs.getString(8);
-                int isUser = rs.getInt(9);
+                String fullName = rs.getString(2);
+                String userName = rs.getString(3);
+                String email = rs.getString(4);
+                String phone = rs.getString(5);
+                String address = rs.getString(6);
+                String pass = rs.getString(7);
+                int isUser = rs.getInt(8);
 
                 User user = new User(fullName, userName, email, phone, address, pass, isUser);
                 mapTemp.put(user.getUname(), user);
@@ -111,49 +132,93 @@ public class AccountDAO implements ObjectDAO{
 //		}
 //
 //	}
-    public boolean add(Object obj) {
+public boolean add(Object obj, Object obj1) {
+    User tk = (User) obj;
+    Keys key = (Keys) obj1;
+
+    String sqlInsertUser = "INSERT INTO USERS (fullname, userName, email, phone, address, upassword, isUser) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sqlInsertUserKey = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, ?)";
+
+    try {
+        Connection connect = new Connect().getconnecttion();
+        connect.setAutoCommit(false); // Disable auto-commit
+
+        // Insert into USERS table
+        try (PreparedStatement ppstmUser = connect.prepareStatement(sqlInsertUser)) {
+            ppstmUser.setString(1, tk.getFullName());
+            ppstmUser.setString(2, tk.getUname());
+            ppstmUser.setString(3, tk.getEmail());
+            ppstmUser.setString(4, tk.getPhone());
+            ppstmUser.setString(5, tk.getAddress());
+            ppstmUser.setString(6, tk.getPass());
+            ppstmUser.setInt(7, tk.getIsUser());
+            ppstmUser.executeUpdate();
+        }
+
+        // Insert into USERKEYS table
+        try (PreparedStatement ppstmUserKey = connect.prepareStatement(sqlInsertUserKey)) {
+            ppstmUserKey.setString(1, tk.getUname()); // Assuming username is used as userID
+            ppstmUserKey.setString(2, key.getPublicKey());
+            ppstmUserKey.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            ppstmUserKey.setInt(4, 1); // Assuming 1 represents an active key
+            ppstmUserKey.executeUpdate();
+        }
+
+        connect.commit(); // Commit the transaction
+        connect.setAutoCommit(true); // Enable auto-commit again
+
+        return true;
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println(e.getMessage());
+    }
+    return false;
+}
+
+
+    public boolean update(Object obj, Object obj1) {
         User tk = (User) obj;
-        mapAccount.put(tk.getUname(), tk);
-        String sql = "insert into USERS values(?,?,?,?,?,?,?)";
+        Keys key = (Keys) obj1;
+
+        String sqlUpdateUser = "UPDATE USERS SET fullname=?, email=?, phone=?, address=?, upassword=?, isUser=? WHERE userName=?";
+        String sqlUpdateUserKey = "UPDATE USERKEYS SET publicKey=?, date_time=?, key_status=? WHERE userID=?";
 
         try {
             Connection connect = new Connect().getconnecttion();
-            PreparedStatement ppstm = connect.prepareStatement(sql);
-            ppstm.setString(1, tk.getFullName());
-            ppstm.setString(2, tk.getUname());
-            ppstm.setString(3, tk.getEmail());
-            ppstm.setString(4, tk.getPhone());
-            ppstm.setString(5, tk.getAddress());
-            ppstm.setString(6, tk.getPass());
-            ppstm.setInt(7, tk.getIsUser());
-            ppstm.executeUpdate();
-            return true;
+            connect.setAutoCommit(false); // Disable auto-commit
 
+            // Update USERKEYS table
+            try (PreparedStatement ppstmUserKey = connect.prepareStatement(sqlUpdateUserKey)) {
+                ppstmUserKey.setString(1, key.getPublicKey());
+                ppstmUserKey.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+                ppstmUserKey.setInt(3, 1); // Assuming 1 represents an active key
+                ppstmUserKey.setString(4, tk.getUname()); // Assuming username is used as userID
+                ppstmUserKey.executeUpdate();
+            }
+
+            // Update USERS table
+            try (PreparedStatement ppstmUser = connect.prepareStatement(sqlUpdateUser)) {
+                ppstmUser.setString(1, tk.getFullName());
+                ppstmUser.setString(2, tk.getEmail());
+                ppstmUser.setString(3, tk.getPhone());
+                ppstmUser.setString(4, tk.getAddress());
+                ppstmUser.setString(5, tk.getPass());
+                ppstmUser.setInt(6, tk.getIsUser());
+                ppstmUser.setString(7, tk.getUname());
+                ppstmUser.executeUpdate();
+            }
+
+            connect.commit(); // Commit the transaction
+            connect.setAutoCommit(true); // Enable auto-commit again
+
+            return true;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
         return false;
     }
 
-    public void editUser(String userName, String upassword, String fullName, String phone, String email, String address, int isUser) {
-        String query = "UPDATE USERS SET upassword=?, fullName=?, phone=?, email=?, address=?, isUser=? WHERE userName=?;";
-        try {
-            Connection conn =new Connect().getconnecttion();
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, upassword);
-            ps.setString(2, fullName);
-            ps.setString(3, phone);
-            ps.setString(4, email);
-            ps.setString(5, address);
-            ps.setInt(6, isUser);
-            ps.setString(7, userName);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
 
     public static List<User> getAllUsers() {
         Map<String, User> userMap = loadData();
@@ -168,8 +233,8 @@ public class AccountDAO implements ObjectDAO{
             ps.setString(1, userName);
             ResultSet rs = ps.executeQuery();
             while (rs.next())
-                return new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                        rs.getString(5), rs.getString(6), rs.getInt(7));
+                return new User(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getInt(8));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,20 +242,37 @@ public class AccountDAO implements ObjectDAO{
         return null;
     }
 
-    public boolean delete(String nameAcc) {
-        mapAccount.remove(nameAcc);
+    public boolean delete(String userName) {
+        String sqlDeleteUser = "DELETE FROM USERS WHERE userName=?";
+        String sqlDeleteUserKey = "DELETE FROM USERKEYS WHERE userID=?";
+
         try {
-            String sql = "delete from USERS where userName='" + nameAcc + "'";
             Connection connect = new Connect().getconnecttion();
-            Statement stmt =  connect.createStatement();
-            stmt.executeUpdate(sql);
+            connect.setAutoCommit(false); // Disable auto-commit
+
+            // Delete from USERKEYS table
+            try (PreparedStatement ppstmUserKey = connect.prepareStatement(sqlDeleteUserKey)) {
+                ppstmUserKey.setString(1, userName); // Assuming username is used as userID
+                ppstmUserKey.executeUpdate();
+            }
+
+            // Delete from USERS table
+            try (PreparedStatement ppstmUser = connect.prepareStatement(sqlDeleteUser)) {
+                ppstmUser.setString(1, userName);
+                ppstmUser.executeUpdate();
+            }
+
+            connect.commit(); // Commit the transaction
+            connect.setAutoCommit(true); // Enable auto-commit again
+
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return false;
     }
+
 
     public static void main(String[] args) {
         AccountDAO a = new AccountDAO();

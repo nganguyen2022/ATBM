@@ -43,7 +43,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<h2>Sửa thông tin</h2>
-								<form class="form-horizontal" action="<c:url value="/EditUser"></c:url>"
+								<form class="form-horizontal" action="<c:url value="/EditUser?uName=${user.uname}"></c:url>"
 									method="post">
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="pwd">Tên tài khoản*:</label>
