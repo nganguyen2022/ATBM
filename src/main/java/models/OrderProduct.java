@@ -129,7 +129,7 @@ public class OrderProduct {
 		this.signature = signature;
 	}
 
-	//lay du lieu trong don hang va chi tiet don hang
+	//lay du lieu trong don hang va chi tiet don hang đẻ tạo chu ky
 	public String getDataInitSignature(List<DetailOrder> items){
 		items.sort(((o1, o2) -> Double.compare(o2.getPrice(), o1.getPrice())));
 		String data = "OrderProduct{" +

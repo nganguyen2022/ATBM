@@ -105,6 +105,16 @@
 									</td>
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>
+
+								<c:if test="${dh.status == '-1'}">
+                                									<td>Bị chỉnh sửa</td>
+                                									<td>
+                                										<!--<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Duyet"></c:url>"><button class="btn btn-primary">Duyệt</button></a>-->
+
+                                										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white;">Hủy</button></a>
+                                									</td>
+                                									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
+                                </c:if>
 								<c:if test="${dh.status == '1'}">
 									<td>Đã duyệt</td>
 									<td>
@@ -112,6 +122,9 @@
 									</td>
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>
+								<!--<c:if test="${dh.status == '2'}">
+                                									<td>Đã hủy</td>
+                                										</c:if>-->
 
 
 							</tr>

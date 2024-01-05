@@ -53,7 +53,8 @@ public class DonHangServlet extends HttpServlet {
 			String addressDetail = request.getParameter("address-details");
 			String privateKey = request.getParameter("prikey");
 
-			//kiem tra privatekey voi pulickey co phai cung 1 bo khoa khong
+			//goi pthuc areKeyPairsMatching kiem tra privatekey voi pulickey
+			// co phai cung 1 bo khoa khong
 
 			if(puk !=null && !rsa.areKeyPairsMatching(privateKey,puk.getPublicKey())){
 				response.getWriter().println("Private key không hợp lệ");
@@ -76,9 +77,22 @@ public class DonHangServlet extends HttpServlet {
 				new DetailOrderDAO().add(ds_dh);
 			}
 			OrderProduct dh = new OrderProduct(id, tk.getFullName(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0","");
+			// Thêm đoạn mã xử lý trạng thái thanh toán
+			String paymentMethod = request.getParameter("paymentMethod");
+			if (paymentMethod != null && !paymentMethod.isEmpty()) {
+				dh.setCheckout(paymentMethod);
+			}
+			// Chuyển đổi giá trị String thành int trước khi lưu vào cơ sở dữ liệu
+			int checkoutInt = "online".equals(paymentMethod) ? 1 : 0;
+			dh.setCheckout(String.valueOf(checkoutInt));
+			// Cập nhật trạng thái thanh toán trong CSDL
+			OrderDAO orderDAO = new OrderDAO();
+//			orderDAO.add(dh);
+
+			//goi getDataInitSignature lấy du lieu dẻ tao ký
 			String dataInitSignature = dh.getDataInitSignature(dos);
+			//goi ham sign tao ký va luu vao database
 			String ck = new RSAKey().sign(dataInitSignature, privateKey);
-			//tao chu ky moi
 			dh.setSignature(ck);
 			new OrderDAO().add(dh);
 			session.removeAttribute("sizeCart");

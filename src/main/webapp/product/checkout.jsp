@@ -242,6 +242,23 @@
 													rows="2" cols="5">
 											</p>
 										</div>
+										<div class="col-lg-12">
+                                                                                   <p class="single-form-row ">
+                                                                                     <label>Phương thức thanh toán<span class="required">*</span></label>
+                                                                                     <div class="payment-method">
+                                                                                          <div class="form-check">
+                                                                                               <input type="radio" class="form-check-input" name="paymentMethod" id="onlinePayment" value="online"
+                                                                                                onclick="updatePaymentStatus('1')" checked>
+                                                                                                <label class="form-check-label" for="onlinePayment">Thanh toán online</label>
+                                                                                          </div>
+                                                                                          <div class="form-check">
+                                                                                               <input type="radio" class="form-check-input" name="paymentMethod" id="offlinePayment" value="offline"
+                                                                                               onclick="updatePaymentStatus('0')">
+                                                                                               <label class="form-check-label" for="offlinePayment">Thanh toán khi nhận hàng</label>
+                                                                                          </div>
+                                                                                     </div>
+                                                                                   </p>
+                                                                                </div>
 								</div>
 								<div class="containera">
 										<div class="form-group">
@@ -257,7 +274,7 @@
 										<button class="dialog__btn " type="button">Hủy</button>
 										<button class="dialog__btn dialog__btn-ok" type="submit">Đồng ý</button>
 									</div>
-								</div>-->
+								</div>
 							</div>
 							<!-- billing-details-wrap end -->
 						</div>
@@ -435,6 +452,15 @@
             }
         });
     </script>
+    <script>
+                    function updatePaymentStatus(status) {
+
+                        document.getElementById("paymentStatus").value = status;
+
+
+                        document.forms[0].submit();
+                    }
+                </script>
 </body>
 
 <!-- Mirrored from template.hasthemes.com/ruiz/ruiz/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:50:36 GMT -->

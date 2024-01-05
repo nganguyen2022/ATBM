@@ -52,31 +52,6 @@ public static Keys getKeyByUser(String username){
 
 }
 
-    public static Keys getKeyByUser(String username){
-        try{
-            String query = "select * from userkeys where userID = ?";
-            Connection connect = new Connect().getconnecttion();
-            PreparedStatement stmt = connect.prepareStatement(query);
-            stmt.setString(1, username);
-            System.out.println(stmt.toString());
-            ResultSet rs= stmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String user = rs.getString(2);
-                String pk = rs.getString(3);
-                String date = rs.getString(4);
-                int status = rs.getInt(5);
-                Keys key = new Keys(id,user,pk,date, status);
-                return key;
-            }
-            return null;
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 
     private static Map<String, User> loadData() {
         Map<String, User> mapTemp = new HashMap<String, User>();
