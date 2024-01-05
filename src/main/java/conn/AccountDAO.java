@@ -81,58 +81,6 @@ public static Keys getKeyByUser(String username){
 
     }
 
-//    public boolean changePass(String userName, String newPass) {
-//        Account user = mapAccount.get(userName);
-//        if (user != null) {
-//            user.setPassword(newPass);
-//            mapAccount.replace(user.getNameAcc(), user);
-//            edit(user.getNameAcc(), user);
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
-//	public static boolean sendMail(String to, String subject, String text) {
-//		Properties props = new Properties();
-//		props.put("mail.smtp.auth", "true");
-//		props.put("mail.smtp.starttls.enable", "true");
-//		props.put("mail.smtp.host", "smtp.gmail.com");
-//		props.put("mail.smtp.port", "587");
-//
-//		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-//			@Override
-//			protected PasswordAuthentication getPasswordAuthentication() {
-//				return new PasswordAuthentication("ntkien123@gmail.com", "");
-//			}
-//		});
-//		try {
-//			Message message = new MimeMessage(session);
-//			message.setHeader("Content-Type", "text/plain; charset=UTF-8");
-//			message.setFrom(new InternetAddress("shopphoneltw@gmail.com"));
-//			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-//			message.setSubject(subject);
-//			message.setText(text);
-//			Transport.send(message);
-//		} catch (MessagingException e) {
-//			e.getMessage();
-//			return false;
-//		}
-//
-//		return true;
-//	}
-
-//	public boolean passRecorvery(String userName, String email) {
-//
-//		Account tk = mapAccount.get(userName);
-//		if (tk != null) {
-//			sendMail(email, "Cập nhật lại mật khẩu", tk.getPassword());
-//			return true;
-//		} else {
-//			return false;
-//		}
-//
-//	}
 public boolean add(Object obj, Object obj1) {
     User tk = (User) obj;
     Keys key = (Keys) obj1;
@@ -274,6 +222,26 @@ public boolean add(Object obj, Object obj1) {
         return false;
     }
 
+    public void addKeyNew(Object obj, String userName){
+        Keys key = (Keys) obj;
+        String query = "UPDATE USERKEYS SET key_status = 0 WHERE userID = ? AND key_status = 1";
+        String query1 = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, 1)";
+        try{
+            Connection con = new Connect().getconnecttion();
+            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement pre = con.prepareStatement(query1);
+            ps.setString(1, userName); // Assuming username is used as userID
+            ps.executeUpdate();
+
+            pre.setString(1, userName);
+            pre.setString(2, key.getPublicKey());
+            pre.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            pre.executeUpdate();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         AccountDAO a = new AccountDAO();

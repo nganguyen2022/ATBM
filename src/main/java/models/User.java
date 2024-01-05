@@ -20,6 +20,10 @@ public class User {
 		this.isUser = isUser;
 	}
 
+	public User(String uname) {
+		this.uname = uname;
+	}
+
 	public String getUname() {
 		return uname;
 	}
