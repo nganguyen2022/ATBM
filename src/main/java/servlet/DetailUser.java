@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import conn.OrderDAO;
-import conn.ReportDAO;
 import models.OrderProduct;
-import models.Report;
 import models.User;
 
 @WebServlet("/DetailUser")
@@ -38,10 +35,6 @@ public class DetailUser extends HttpServlet {
                 List<OrderProduct> dh = dhDAO.top5DonHang(tk.getFullName());
                 request.setAttribute("donHang", dh);
                 System.out.println("Đơn hàng : " + dh);
-
-                ReportDAO dao = new ReportDAO();
-                List<Report> reports = dao.getReportByUserName(tk.getUname());
-                request.setAttribute("report", reports);
 
                 request.getRequestDispatcher("/product/my-account.jsp").forward(request, response);
             } else {

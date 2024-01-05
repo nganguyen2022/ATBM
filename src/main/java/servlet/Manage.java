@@ -91,19 +91,6 @@ public class Manage extends HttpServlet {
 
                 request.getRequestDispatcher("/admin/manageUser.jsp").forward(request, response);
             }
-                //            }else if(loai.equals("log")) {
-//                System.out.println(LogDAO.mapLog);
-//                request.setAttribute("listLog", LogDAO.mapLog);
-//                request.getRequestDispatcher("/startbootstrap-sb-admin-2-master/manageLog.jsp").forward(request, response);
-//            }
-//            if(loai.equals("discountCode")) {
-//                request.setAttribute("listDiscount", new DiscountCodeDAO().mapDiscount.values());
-//                response.setContentType("application/json");
-//                response.setCharacterEncoding("UTF-8");
-//
-//                request.getRequestDispatcher("/startbootstrap-sb-admin-2-master/ManageDiscountCode.jsp").forward(request, response);
-//            }
-
             }catch(Exception e){
                 e.printStackTrace();
             }

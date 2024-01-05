@@ -43,8 +43,8 @@
     <!--<link rel="stylesheet" href="assets/css/style.min.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="./assets/css/main.css">
-<%--    <link rel="stylesheet" href="../assets/css/base.css">--%>
-<%--    <link rel="stylesheet" href="../assets/css/grid.css">--%>
+    <%--    <link rel="stylesheet" href="../assets/css/base.css">--%>
+    <%--    <link rel="stylesheet" href="../assets/css/grid.css">--%>
     <link rel="stylesheet" href="./assets/css/rebonsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
@@ -160,8 +160,6 @@
                                     <li><a href="#dashboard" data-bs-toggle="tab" class="nav-link active">Quản lý</a></li>
                                     <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Thông tin cá nhân</a></li>
                                     <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Đơn hàng</a></li>
-                                    <li><a href="/product/report.jsp" class="nav-link">Yêu cầu</a></li>
-                                    <li><a href="#listreport" data-bs-toggle="tab" class="nav-link">Danh sách yêu cầu</a></li>
                                     <li><a href="/LogoutServlet" class="nav-link">Đăng xuất</a></li>
                                 </ul>
                             </div>
@@ -285,9 +283,11 @@
                                                     <p>(+84) ${sessionScope.user.phone}</p>
                                                 </div>
                                             </div>
-                                            <div class="button-box" style="padding-top: 20px;">
-                                                <button class="btn default-btn" id="btn_edit_111">Sửa</button>
-                                            </div>
+                                            <form action="Key" method="post">
+                                                <div class="button-box" style="padding-top: 20px;">
+                                                    <button class="btn default-btn" id="btn_edit_111" type="button" onclick="createNewKey()">Tạo key mới</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                     <!-- đơn hàng -->
@@ -329,42 +329,6 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <div class="tab-pane fade" id="listreport">
-                                        <h3>Danh sách yêu cầu</h3>
-                                        <br>
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Thời gian</th>
-                                                    <th>Nội dung</th>
-                                                    <th>Trạng thái</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:set var="count" value="0"></c:set>
-                                                <c:forEach var="re" items="${report}">
-                                                    <tr>
-                                                        <c:set var="count" value="${count + 1 }"></c:set>
-                                                        <td>${count}</td>
-                                                        <td>${re.time}</td>
-                                                        <td>${re.description}</td>
-                                                        <c:set var="duyet" value="${re.status}"></c:set>
-                                                        <c:if test="${duyet == '1' }">
-                                                            <td>Chưa được xử lý</td>
-                                                        </c:if>
-                                                        <c:if test="${duyet == '0' }">
-                                                            <td>Đã được xử lý</td>
-                                                        </c:if>
-                                                    </tr>
-                                                </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -373,39 +337,50 @@
             </div>
         </div>
     </div>
-    <!-- main-content-wrap end -->
+</div>
+<!-- main-content-wrap end -->
 
-    <jsp:include page="/footer.jsp"></jsp:include>
+<jsp:include page="/footer.jsp"></jsp:include>
 
 
-    <!-- JS
+<!-- JS
 ============================================ -->
 
-    <!-- Modernizer JS -->
-    <script src="../product/assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <!-- jquery -->
+<!-- Modernizer JS -->
+<script src="../product/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<!-- jquery -->
 
-    <!-- jquery -->
-    <script src="../product/assets/js/vendor/jquery-3.5.1.min.js"></script>
-    <script src="../product/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<!-- jquery -->
+<script src="../product/assets/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="../product/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
 
 
-    <!-- Bootstrap JS -->
-    <script src="../product/assets/js/vendor/popper.min.js"></script>
-    <script src="../product/assets/js/vendor/bootstrap.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="../product/assets/js/vendor/popper.min.js"></script>
+<script src="../product/assets/js/vendor/bootstrap.min.js"></script>
 
-    <!-- Plugins JS -->
-    <script src="../product/assets/js/plugins/slick.min.js"></script>
+<!-- Plugins JS -->
+<script src="../product/assets/js/plugins/slick.min.js"></script>
 
-    <script src="../product/assets/js/plugins/jquery.nice-select.min.js"></script>
-    <script src="../product/assets/js/plugins/countdown.min.js"></script>
-    <script src="../product/assets/js/plugins/image-zoom.min.js"></script>
-    <script src="../product/assets/js/plugins/fancybox.js"></script>
-    <script src="../product/assets/js/plugins/scrollup.min.js"></script>
-    <script src="../product/assets/js/plugins/jqueryui.min.js"></script>
-    <script src="../product/assets/js/plugins/ajax-contact.js"></script>
-    <!-- Main JS -->
-    <script src="./assets/js/main.js"></script>
+<script src="../product/assets/js/plugins/jquery.nice-select.min.js"></script>
+<script src="../product/assets/js/plugins/countdown.min.js"></script>
+<script src="../product/assets/js/plugins/image-zoom.min.js"></script>
+<script src="../product/assets/js/plugins/fancybox.js"></script>
+<script src="../product/assets/js/plugins/scrollup.min.js"></script>
+<script src="../product/assets/js/plugins/jqueryui.min.js"></script>
+<script src="../product/assets/js/plugins/ajax-contact.js"></script>
+<!-- Main JS -->
+<script src="./assets/js/main.js"></script>
+
+<script>
+    function createNewKey() {
+        // Hiển thị hộp thoại thông báo
+        alert("Cặp khóa mới đã được tạo và gửi đến mail của bạn!");
+
+        // Chuyển hướng đến servlet DetailUser.java
+        window.location.href = '/Key';
+    }
+</script>
 
 </body>
 <!-- Mirrored from ruizzz.tk/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Nov 2022 09:21:32 GMT -->
