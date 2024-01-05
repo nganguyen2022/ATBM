@@ -47,7 +47,26 @@ public class Manage extends HttpServlet {
                 OrderDAO dhDAO = new OrderDAO();
                 List<OrderProduct> listOrder = new ArrayList<>();
                 Map<String, OrderProduct> dsDonHang = dhDAO.mapDonHang;
+                RSAKey rsa = new RSAKey();
                 for (OrderProduct od: dsDonHang.values()) {
+                    //kiem tra chu ky
+                    System.out.println(od.toString());
+                    Keys puk = AccountDAO.getKeyByUser(od.getNameAcc());
+                    List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
+                    try {
+                        //goi ham verify kiem tra lay dl ký dh tao chu ky moi và lay du lieu da ky trong db chu ky cũ
+                        // của ng dung có trùng khong
+                        boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
+                        //khac nhau thì cap nhat status=-1 vafgoi ham update db
+                        if(!check){
+                            od.setStatus("-1");
+                            new OrderDAO().edit(od.getIdOrder(), od);
+                        }
+                    }catch (Exception e){
+                        od.setStatus("-1");
+                        new OrderDAO().edit(od.getIdOrder(), od);
+                    }
+                    // end
                     listOrder.add(od);
                 }
                 request.setAttribute("dsDonHang", listOrder);

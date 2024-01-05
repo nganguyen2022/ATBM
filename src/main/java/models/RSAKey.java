@@ -36,6 +36,7 @@ public class RSAKey {
         publicKey = keyPair.getPublic();
         privateKey = keyPair.getPrivate();
     }
+    //kiem tra lay dl ký dh và lay du lieu da ky trong db  của ng dung có trùng khong
     public boolean verify(String data, String signatureBase64, String publicKeyBase64) throws Exception {
         // Chuyển đổi chuỗi base64 của public key thành kiểu byte[]
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyBase64);
@@ -59,6 +60,7 @@ public class RSAKey {
         signature.update(dataBytes);
         return signature.verify(signatureBytes);
     }
+    //tao chu ky
     public  String sign(String data, String privateKeyBase64) throws Exception {
         // Chuyển đổi chuỗi base64 của private key thành kiểu byte[]
         byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyBase64);
@@ -80,6 +82,7 @@ public class RSAKey {
         byte[] signatureBytes = signature.sign();
         return Base64.getEncoder().encodeToString(signatureBytes);
     }
+    //kiem tra privatekey voi pulickey co phai cung 1 bo khoa khong
     public  boolean areKeyPairsMatching(String privateKeyBase64, String publicKeyBase64) {
         try {
             // Chuyển đổi chuỗi base64 của private key và public key thành kiểu byte[]

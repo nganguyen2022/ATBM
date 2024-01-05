@@ -49,6 +49,12 @@ public class DuyetXoaXemDonHang extends HttpServlet {
 			if(chucNang.equals("Xoa")) {
 //				Log log = new Log(Log.DANGER,tkLogin.getNameAcc(),src,"Delete Order: " + dhDAO.mapDonHang.get(maDH),1);
 //				new LogDAO().add(log);
+
+//				OrderProduct dh = dhDAO.mapDonHang.get(maDH);
+//				OrderProduct dhNew = new OrderProduct(maDH, dh.getNameAcc(), dh.getDateOrder(),dh.getDateDelivery(), dh.getTotalMoney(), dh.getPhone(), dh.getNameRecipient(), dh.getAddress(), dh.getNote(), dh.getCheckout(), "2", dh.getSignature());
+//				dhDAO.edit(maDH, dhNew);
+//				request.getRequestDispatcher("/admin/manage?loai=oder").forward(request, response);
+
 				dhDAO.delete(maDH);
 				dsDH_DAO.delete(maDH);
 				request.getRequestDispatcher("/admin/manage?loai=oder&index="+index+"").forward(request, response);
