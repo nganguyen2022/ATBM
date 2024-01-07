@@ -36,6 +36,8 @@ public class DonHangServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
+			response.setContentType("text/html;charset=UTF-8");
+			request.setCharacterEncoding("UTF-8");
 			HttpSession session = request.getSession();
 			User tk = (User) session.getAttribute("user");
 			System.out.println(tk.toString());
@@ -76,7 +78,7 @@ public class DonHangServlet extends HttpServlet {
 				dos.add(ds_dh);
 				new DetailOrderDAO().add(ds_dh);
 			}
-			OrderProduct dh = new OrderProduct(id, tk.getFullName(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0","");
+			OrderProduct dh = new OrderProduct(id, tk.getUname(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0","");
 			// Thêm đoạn mã xử lý trạng thái thanh toán
 			String paymentMethod = request.getParameter("paymentMethod");
 			if (paymentMethod != null && !paymentMethod.isEmpty()) {

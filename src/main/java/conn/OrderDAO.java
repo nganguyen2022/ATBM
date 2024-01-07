@@ -16,7 +16,7 @@ public class OrderDAO implements ObjectDAO {
 	public OrderDAO() {
 		// TODO Auto-generated constructor stub
 	}
-	private static Map<String, OrderProduct> loadData(){
+	public static Map<String, OrderProduct> loadData(){
 		Map<String, OrderProduct> mapTemp = new HashMap<String, OrderProduct>();
 		try {
 			String query = "select * from OrderProduct";
@@ -77,14 +77,38 @@ public class OrderDAO implements ObjectDAO {
 		}
 		return false;
 	}
-	@Override
+	public boolean cancel(String id ){
+		OrderProduct on = mapDonHang.get(id);
+		on.setStatus("2");
+		mapDonHang.replace(id, on);
+		try {
+			String sql = "update OrderProduct set status=? where idOrder=?";
+			Connection connect = new Connect().getconnecttion();
+			PreparedStatement ppstm = connect.prepareStatement(sql);
+			ppstm.setInt(1,2);
+			ppstm.setString(2,id);
+
+
+			System.out.println(ppstm.toString() + "------");
+
+			ppstm.executeUpdate();
+			return true;
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
+		@Override
 	public boolean edit(String id, Object obj) {
 		OrderProduct donHang = (OrderProduct) obj;
 		mapDonHang.replace(id, donHang);
 		try {
 			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?," +
 					"nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
-
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,donHang.getNameAcc());
@@ -99,6 +123,9 @@ public class OrderDAO implements ObjectDAO {
 			ppstm.setString(10,donHang.getStatus());
 			ppstm.setString(11,donHang.getSignature());
 			ppstm.setString(12,donHang.getIdOrder());
+
+			System.out.println(ppstm.toString() + "------");
+
 			ppstm.executeUpdate();
 			return true;
 
