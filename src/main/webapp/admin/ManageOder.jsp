@@ -56,7 +56,7 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Danh sách đơn hàng</h3>
-
+                        <button onclick="reloadPage()" class="btn btn-primary">Kiểm tra đơn hàng</button>
 					</div>
 
 					</div>
@@ -122,9 +122,9 @@
 									</td>
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>
-								<!--<c:if test="${dh.status == '2'}">
+								<c:if test="${dh.status == '2'}">
                                 									<td>Đã hủy</td>
-                                										</c:if>-->
+                                										</c:if>
 
 
 							</tr>
@@ -182,6 +182,9 @@
 		$(document).ready(function() {
 			$('#dev-table').DataTable();
 		});
+		const reloadPage = ()=>{
+		    location.reload();
+		}
 	</script>
     <!-- Bootstrap core JavaScript-->
 

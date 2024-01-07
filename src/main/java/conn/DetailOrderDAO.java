@@ -17,6 +17,7 @@ public class DetailOrderDAO implements ObjectDAO {
 	}
 	private List<DetailOrder> loadData(){
 		List<DetailOrder> mapTemp = new ArrayList<DetailOrder>();
+
 		try {
 			String query = "select * from DetailOrder";
 			Connection connect = new Connect().getconnecttion();
