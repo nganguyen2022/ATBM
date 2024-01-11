@@ -105,7 +105,7 @@
             <span>(18 reviews)</span>
           </div>
           <div class="product__details__price">${detail.price }VNĐ</div>
-          <p>${detail.descripsion }</p>
+          <p>${detail.description }</p>
           <div class="product__details__quantity">
             <div class="quantity">
               <div class="pro-qty">
@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <form action="/cart" method="post">
+          <form action="/product/CartServlet?maSP=${detail.pID}&action=Them" method="post">
             <input type="hidden" name="productCode"
                    value="<c:out value='${detail.pID}'/>">
             <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">

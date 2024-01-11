@@ -34,6 +34,18 @@
     padding: 20px;
     padding-left: 100px;
   }
+  .img_pro{
+    height: 270px;
+    width: 230px;
+    position: relative;
+    overflow: hidden;
+    background-position: center center;
+  }
+  .namepro{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 <body>
 <!-- Header Section Begin -->
@@ -101,7 +113,7 @@
         <form action="/product/CartServlet?maSP=${p.pID}&action=Them" method="post">
         <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
           <div class="featured__item">
-            <div class="featured__item__pic set-bg" data-setbg="${p.img }">
+            <div class="featured__item__pic set-bg img_pro" data-setbg="${p.img }">
             </div>
             <div class="featured__item__text">
               <h6>

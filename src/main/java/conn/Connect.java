@@ -13,10 +13,10 @@ public class Connect {
 		}
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/WEBCLOTHES5";
+			String url = "jdbc:mysql://localhost:3306/WEBCLOTHES";
 			String user = "root";
-			//String pass = "24082002";
-			String pass = "";
+			String pass = "24082002";
+			//String pass = "";
 			connection =  DriverManager.getConnection(url, user, pass);
 			return connection;
 

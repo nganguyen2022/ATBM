@@ -860,6 +860,7 @@ ol {
 
 .featured__item__pic {
 	height: 270px;
+	width: 230px;
 	position: relative;
 	overflow: hidden;
 	background-position: center center;
