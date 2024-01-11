@@ -210,6 +210,12 @@
 							<div class="billing-details-wrap">
 								<br>
 								<h3 class="shoping-checkboxt-title">Thanh toán</h3>
+								<% String privateKeyError = (String) request.getAttribute("privateKeyError"); %>
+                                          <% if (privateKeyError != null && !privateKeyError.isEmpty()) { %>
+                                         <div class="alert alert-danger" role="alert">
+                                            <%= privateKeyError %>
+                                              </div>
+                                  <% } %>
 								<div class="row">
 									<div class="col-lg-12">
 										<p class="single-form-row">
@@ -262,6 +268,7 @@
 								</div>
 								<div class="containera">
 										<div class="form-group">
+
 											<label for="prikey">Nhập private key của bạn:</label><br>
 											<input type="text" id="prikey" name="prikey" required>
 										</div>

@@ -35,6 +35,12 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
+	<style>
+	button.btn.btn-primary.a {
+        margin-top: -61px;
+        margin-left: 902px;
+    }
+	</style>
 </head>
 
 <body id="page-top">
@@ -65,7 +71,7 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">Danh sách đơn hàng</h3>
 
-                        <button onclick="reloadPage()" class="btn btn-primary">Kiểm tra đơn hàng</button>
+                        <button onclick="reloadPage()" class="btn btn-primary a">Kiểm tra đơn hàng</button>
 
 					</div>
 
@@ -110,8 +116,8 @@
 								<c:if test="${dh.status == '0'}">
 									<td>Chưa duyệt</td>
 									<td>
-										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Duyet"></c:url>"><button class="btn btn-primary">Duyệt</button></a> </t>
-										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white;">Hủy</button></a>
+										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Duyet"></c:url>"><button class="btn btn-primary">Duyệt</button></a> </t><br>
+										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white; padding: 6px 18px;margin-top: 5px;">Hủy</button></a>
 									</td>
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>
@@ -119,16 +125,16 @@
 								<c:if test="${dh.status == '-1'}">
                                 									<td>Bị chỉnh sửa</td>
                                 									<td>
-                                										<!--<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Duyet"></c:url>"><button class="btn btn-primary">Duyệt</button></a>-->
 
-                                										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white;">Hủy</button></a>
+
+                                										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white; padding: 6px 18px;">Hủy</button></a>
                                 									</td>
                                 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
                                 </c:if>
 								<c:if test="${dh.status == '1'}">
 									<td>Đã duyệt</td>
 									<td>
-										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white;">Hủy</button></a>
+										<a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xoa"></c:url>"><button class="btn" style="background-color: red; color: white; padding: 6px 18px;">Hủy</button></a>
 									</td>
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>

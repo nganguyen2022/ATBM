@@ -89,7 +89,9 @@ public class DonHangServlet extends HttpServlet {
 			OrderProduct dh = new OrderProduct();
 
 			if(puk !=null && !rsa.areKeyPairsMatching(privateKey,puk.getPublicKey())){
-				response.getWriter().println("Private key không hợp lệ");
+				request.setAttribute("privateKeyError", "Sai private key");
+
+				request.getRequestDispatcher("/checkout").forward(request, response);
 			}
 			for (Keys pubs : puk0) {
 				int row = acc.countStatus0(tk.getUname());
