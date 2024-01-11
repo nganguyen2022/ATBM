@@ -37,6 +37,11 @@ public class checkout extends HttpServlet {
 			 double tong = (double) session.getAttribute("total");
 			 double tongS = tong + feeInt;
 			 session.setAttribute("fullPrice", tongS);
+
+			 String privateKeyError = (String) request.getAttribute("privateKeyError");
+			 if (privateKeyError != null && !privateKeyError.isEmpty()) {
+				 request.setAttribute("privateKeyError", privateKeyError);
+			 }
 			 getServletContext().getRequestDispatcher("/product/checkout.jsp").forward(request, response);
 		 }catch (Exception e ){
 			 e.getStackTrace();
