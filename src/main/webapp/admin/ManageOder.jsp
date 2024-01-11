@@ -56,7 +56,9 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Danh sách đơn hàng</h3>
-						<button onclick="reloadPage()" class="btn btn-primary">Kiểm tra đơn hàng</button>
+
+                        <button onclick="reloadPage()" class="btn btn-primary">Kiểm tra đơn hàng</button>
+
 					</div>
 
 					</div>
@@ -137,21 +139,14 @@
 			</div>
 		</div>
 
-
-
 	</div>
                 </div>
 
-
             </div>
-
 
         </div>
 
-
     </div>
-
-
 
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -185,7 +180,7 @@
 			$('#dev-table').DataTable();
 		});
 		const reloadPage = ()=>{
-			location.reload();
+		    location.reload();
 		}
 	</script>
     <!-- Bootstrap core JavaScript-->

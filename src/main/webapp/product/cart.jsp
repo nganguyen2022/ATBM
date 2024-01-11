@@ -112,7 +112,9 @@
                                             <p class="text-danger">${errorMessage}</p>
                                             <tr>
                                                 <td class="plantmore-product-thumbnail thumbnail"><a href="<c:url value="/DetailServlet?maSP=${item.value.idP}"></c:url>"><img
-                                                        src="${item.value.nameImage}" alt=""></a></td>
+
+                                                            src="${item.value.nameImage}" alt=""></a></td>
+
                                                 <td class="plantmore-product-name"><a href="<c:url value="/DetailServlet?maSP=${item.value.idP}"></c:url>">${item.value.nameP}</a></td>
                                                 <td class="plantmore-product-price"><span class="amount">${item.value.price}00
                                                         ₫</span></td>

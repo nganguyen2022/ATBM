@@ -162,8 +162,32 @@ public class CartServlet extends HttpServlet {
 				session.setAttribute("cart", mapCart);
 				session.setAttribute("total", total);
 				session.setAttribute("sizeCart", sizeCart);
-				getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);;
+				getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);
 			}
+//			if(action.equalsIgnoreCase("Update")) {
+//				String newQuantity = request.getParameter("quantity");
+//				Map<String, BillProduct> mapCart = (Map<String, BillProduct>)obj;
+//				BillProduct billProduct = mapCart.get(maSP);
+//				try {
+//
+//					totalP = Integer.parseInt(newQuantity);
+//				} catch (Exception e) {
+//					// TODO: handle exception
+//					e.getMessage();
+//				}
+//				totalMoney = billProduct.getPrice() * totalP;
+//
+//				billProduct.setQuantity(totalP);
+//				billProduct.setTotal(totalMoney);
+//				for (BillProduct b : mapCart.values()) {
+//					total+= b.getTotal();
+//				}
+//				sizeCart = mapCart.size();
+//				session.setAttribute("cart", mapCart);
+//				session.setAttribute("total", total);
+//				session.setAttribute("sizeCart", sizeCart);
+//				getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);;
+//			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}

@@ -103,6 +103,7 @@ public class DonHangServlet extends HttpServlet {
 			if (date.isAfter(newKeyTime) && rsa.areKeyPairsMatching(privateKey, puk.getPublicKey())) {
 				dh = new OrderProduct(id, tk.getUname(), dateTime, dateDeliveryOder, tongS, telephone, fName, addressOder, note, "0", "0", "");
 			}
+      
 			// Thêm đoạn mã xử lý trạng thái thanh toán
 			String paymentMethod = request.getParameter("paymentMethod");
 			if (paymentMethod != null && !paymentMethod.isEmpty()) {

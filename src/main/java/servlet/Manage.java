@@ -58,7 +58,6 @@ public class Manage extends HttpServlet {
                 RSAKey rsa = new RSAKey();
                 DetailOrderDAO detailOrderDAO = new DetailOrderDAO();
 
-
                 for (OrderProduct od : dsDonHang.values()) {
                     String pub = acc.getTimePublicKey(od.getNameAcc());
                     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -75,6 +74,7 @@ public class Manage extends HttpServlet {
                     if (puk != null) {
                         List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
                         if(!od.getStatus().equals("2"))
+
                             try {
                                 boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
 
@@ -92,6 +92,7 @@ public class Manage extends HttpServlet {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+
                             od.setStatus("-1");
                             new OrderDAO().edit(od.getIdOrder(), od);
                         }
@@ -104,7 +105,9 @@ public class Manage extends HttpServlet {
                 System.out.println("**************************");
 
                 for (OrderProduct tmp: listOrder
-                ) {
+
+                     ) {
+                  
                     System.out.println(tmp.toString());
 
                 }
