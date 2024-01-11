@@ -79,7 +79,7 @@
                                         <tr>
                                             <c:set var="count" value="${count + 1 }"></c:set>
                                             <td><c:out value="${count}"></c:out></td>
-                                            <td><img alt="hinhSP" style="width: 100px" src="../assets/img/product/${dh.nameImage}"></td>
+                                            <td><img alt="hinhSP" style="width: 100px" src="${dh.nameImage}"></td>
                                             <td style="width: 510px">${dh.nameP}</td>
                                             <td>${dh.price}00 đ</td>
                                             <td>${dh.quantity}</td>

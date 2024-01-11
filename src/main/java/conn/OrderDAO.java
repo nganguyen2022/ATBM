@@ -78,33 +78,45 @@ public class OrderDAO implements ObjectDAO {
 		}
 		return false;
 	}
+
+	//HỦY
 	public boolean cancel(String id ){
 		OrderProduct on = mapDonHang.get(id);
-		on.setStatus("2");
+		System.out.println("Order -----status before update: " + on.getStatus());
+		if ("1".equals(on.getCheckout())) {
+			on.setStatus("3");
+		} else {
+			on.setStatus("2");
+		}
+
 		mapDonHang.replace(id, on);
-		try {
-			String sql = "update OrderProduct set status=? where idOrder=?";
-			Connection connect = new Connect().getconnecttion();
-			PreparedStatement ppstm = connect.prepareStatement(sql);
-			ppstm.setInt(1,2);
-			ppstm.setString(2,id);
 
+		try (Connection connect = new Connect().getconnecttion();
+			 PreparedStatement ppstm = connect.prepareStatement("update OrderProduct set status=? where idOrder=?")) {
 
-			System.out.println(ppstm.toString() + "------");
+			ppstm.setInt(1, Integer.parseInt(on.getStatus()));
+			ppstm.setString(2, id);
+
+			System.out.println("--thihau----"+ppstm.toString() + "--thihau----");
+
 
 			ppstm.executeUpdate();
 			return true;
-
+		} catch (SQLException e) {
+			// Xử lý ngoại lệ liên quan đến cơ sở dữ liệu
+			System.out.println("LỖI CSDL " + e.getMessage());
+			e.printStackTrace();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			// Xử lý ngoại lệ chung
 			e.printStackTrace();
 		}
+
 		return false;
 
 	}
 
 
-		@Override
+	@Override
 	public boolean edit(String id, Object obj) {
 		OrderProduct donHang = (OrderProduct) obj;
 		mapDonHang.replace(id, donHang);

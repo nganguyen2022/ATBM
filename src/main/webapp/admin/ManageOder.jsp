@@ -125,8 +125,11 @@
 									<td><a href="<c:url value="/admin/DuyetXoaXemDonHang?id=${dh.idOrder}&chucNang=Xem"></c:url>"><button class="btn btn-warning">Xem</button></a></td>
 								</c:if>
 								<c:if test="${dh.status == '2'}">
-                                									<td>Đã hủy</td>
+                                	<td>Đã hủy</td>
 								</c:if>
+								<c:if test="${dh.status == '3'}">
+                                    <td>Đã hủy và hoàn tiền</td>
+                                </c:if>
 								<c:if test="${dh.status == '-2'}">
 									<td>Không được xác nhận</td>
 								</c:if>

@@ -73,27 +73,33 @@ public class Manage extends HttpServlet {
                     Keys puk = AccountDAO.getKeyByUser(od.getNameAcc());
                     if (puk != null) {
                         List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
-                        if(!od.getStatus().equals("2"))
-
+                        if (!od.getStatus().equals("2") && !od.getStatus().equals("3") ) {
+                            System.out.println("Inside if block");
                             try {
                                 boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
 
                                 if (!check) {
-                                    if (exist != null && (exist.getStatus().equals("0") || exist.getStatus().equals("1"))){
-                                        LocalDateTime orderCreate = LocalDateTime.parse(exist.getDateOrder(), format);
-                                        if (orderCreate.isBefore(newKeyTime)){
-                                            return;
-                                        }
-                                        else {
-                                            od.setStatus("-1");
-                                            new OrderDAO().edit(od.getIdOrder(), od);
-                                        }
-                                    }
+                                    od.setStatus("-1");
+                                    new OrderDAO().edit(od.getIdOrder(), od);
+                                } else if ("1".equals(od.getStatus())) {
+                                    // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
+                                    // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
+
+                                    od.setStatus("1");
+                                    new OrderDAO().edit(od.getIdOrder(), od);
+                                }
+                                if(!check && "1".equals(od.getStatus())){
+                                    od.setStatus("-1");
+                                    new OrderDAO().edit(od.getIdOrder(), od);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-
-                            od.setStatus("-1");
+                                od.setStatus("-1");
+                                new OrderDAO().edit(od.getIdOrder(), od);
+                            }
+                        } else if ("1".equals(od.getStatus())) {
+                            // Trong trường hợp ấn nút "Hủy", thực hiện chuyển trạng thái từ '1' sang '3'
+                            od.setStatus("3");
                             new OrderDAO().edit(od.getIdOrder(), od);
                         }
 
