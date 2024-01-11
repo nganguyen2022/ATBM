@@ -18,20 +18,20 @@ import models.User;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LoginServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LoginServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 	}
 
 	/**
@@ -45,15 +45,22 @@ public class LoginServlet extends HttpServlet {
 		Load load = new Load();
 		pass = EncryptPass.toSHA1(pass);
 		User u = load.login(user, pass);
-		if(u == null) {
-			request.setAttribute("massage", "Sai thông tin đăng nhập");
+		if (u == null) {
+			request.setAttribute("message", "Sai thông tin đăng nhập");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
-		}else {
+		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", u);
 			session.setMaxInactiveInterval(600);
-			request.getRequestDispatcher("ProductServlet").forward(request, response);
+
+			if (u.getIsUser() == 0) {
+				session.setAttribute("isAdmin", true);
+				response.sendRedirect("/admin/index.jsp");
+			} else {
+				response.sendRedirect("ProductServlet");
+			}
 		}
+
 	}
 
 }
