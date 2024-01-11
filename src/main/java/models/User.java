@@ -20,6 +20,9 @@ public class User {
 		this.isUser = isUser;
 	}
 
+	public User() {
+	}
+
 	public User(String uname) {
 		this.uname = uname;
 	}

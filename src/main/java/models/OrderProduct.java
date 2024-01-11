@@ -33,6 +33,9 @@ public class OrderProduct {
 		this.signature = signature;
 	}
 
+	public OrderProduct() {
+	}
+
 	public String getIdOrder() {
 		return idOrder;
 	}

@@ -56,7 +56,9 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Danh sách đơn hàng</h3>
+
                         <button onclick="reloadPage()" class="btn btn-primary">Kiểm tra đơn hàng</button>
+
 					</div>
 
 					</div>
@@ -124,8 +126,10 @@
 								</c:if>
 								<c:if test="${dh.status == '2'}">
                                 									<td>Đã hủy</td>
-                                										</c:if>
-
+								</c:if>
+								<c:if test="${dh.status == '-2'}">
+									<td>Không được xác nhận</td>
+								</c:if>
 
 							</tr>
 						</c:forEach>
@@ -135,21 +139,14 @@
 			</div>
 		</div>
 
-
-
 	</div>
                 </div>
 
-
             </div>
-
 
         </div>
 
-
     </div>
-
-
 
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
