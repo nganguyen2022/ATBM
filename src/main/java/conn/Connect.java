@@ -11,7 +11,7 @@ public class Connect {
 			String url = "jdbc:mysql://localhost:3306/WEBCLOTHES";
 			String user = "root";
 			//String pass = "24082002";
-			String pass = "";
+			String pass = "123456";
 			return DriverManager.getConnection(url, user, pass);
 
 		} catch (ClassNotFoundException e) {

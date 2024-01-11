@@ -5,18 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import javax.mail.*;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import models.*;
-import conn.*;
 
 public class AccountDAO implements ObjectDAO{
     public static Map<String, User> mapAccount = loadData();
@@ -28,7 +18,7 @@ public class AccountDAO implements ObjectDAO{
 //
 public static Keys getKeyByUser(String username){
     try{
-        String query = "select * from userkeys where userID = ?";
+        String query = "select * from userkeys where userID = ? AND key_status = 1";
         Connection connect = new Connect().getconnecttion();
         PreparedStatement stmt = connect.prepareStatement(query);
         stmt.setString(1, username);
@@ -49,8 +39,69 @@ public static Keys getKeyByUser(String username){
         e.printStackTrace();
         return null;
     }
-
 }
+
+    public static List<Keys> getKey0ByUser(String username){
+        List<Keys> keys = new ArrayList<>();
+        try{
+            String query = "select * from userkeys where userID = ? AND key_status = 0";
+            Connection connect = new Connect().getconnecttion();
+            PreparedStatement stmt = connect.prepareStatement(query);
+            stmt.setString(1, username);
+            System.out.println(stmt.toString());
+            ResultSet rs= stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String user = rs.getString(2);
+                String pk = rs.getString(3);
+                String date = rs.getString(4);
+                int status = rs.getInt(5);
+                Keys key = new Keys(id,user,pk,date, status);
+                keys.add(key);
+            }
+            return keys;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int countStatus0(String userName){
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(publicKey) AS row_count FROM USERKEYS WHERE userID = ? AND key_status = 0";
+            Connection conn = new Connect().getconnecttion();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, userName);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getInt("row_count");
+                }
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public String getTimePublicKey(String userName){
+        String date_time = null;
+        try{
+            String query = "SELECT date_time FROM USERKEYS WHERE userID = ? AND key_status = 1 ORDER BY date_time DESC LIMIT 1";
+            Connection conn = new Connect().getconnecttion();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, userName);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                date_time = rs.getString("date_time");
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return date_time;
+    }
 
 
     private static Map<String, User> loadData() {
@@ -222,16 +273,23 @@ public boolean add(Object obj, Object obj1) {
         return false;
     }
 
-    public void addKeyNew(Object obj, String userName){
-        Keys key = (Keys) obj;
+    public void updateStatusKey(String userName){
         String query = "UPDATE USERKEYS SET key_status = 0 WHERE userID = ? AND key_status = 1";
-        String query1 = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, 1)";
         try{
             Connection con = new Connect().getconnecttion();
             PreparedStatement ps = con.prepareStatement(query);
-            PreparedStatement pre = con.prepareStatement(query1);
             ps.setString(1, userName); // Assuming username is used as userID
             ps.executeUpdate();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void addKeyNew(Object obj, String userName){
+        Keys key = (Keys) obj;
+        String query1 = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, 1)";
+        try{
+            Connection con = new Connect().getconnecttion();
+            PreparedStatement pre = con.prepareStatement(query1);
 
             pre.setString(1, userName);
             pre.setString(2, key.getPublicKey());
@@ -243,6 +301,23 @@ public boolean add(Object obj, Object obj1) {
         }
     }
 
+    public static boolean checkKey(String userName){
+        String sql = "SELECT Count(publicKey) FROM USERKEYS WHERE userID = ? AND key_status = 1";
+        try{
+            Connection con = new Connect().getconnecttion();
+            PreparedStatement pre = con.prepareStatement(sql);
+            pre.setString(1, userName);
+            try (ResultSet resultSet = pre.executeQuery()){
+                if (resultSet.next()){
+                    int count = resultSet.getInt(1);
+                    return count > 0; // If count > 0, the key already exists
+                }
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static void main(String[] args) {
         AccountDAO a = new AccountDAO();
         System.out.println(a.getAllUsers());

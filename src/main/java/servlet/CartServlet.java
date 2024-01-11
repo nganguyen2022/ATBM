@@ -120,24 +120,44 @@ public class CartServlet extends HttpServlet {
 				session.setAttribute("sizeCart", sizeCart);
 				getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);
 			}else
-			if(action.equalsIgnoreCase("Update")) {
+			if (action.equalsIgnoreCase("Update")) {
 				String newQuantity = request.getParameter("quantity");
-				Map<String, BillProduct> mapCart = (Map<String, BillProduct>)obj;
-				BillProduct billProduct = mapCart.get(maSP);
-				try {
+				int newQuantityValue;
 
-					totalP = Integer.parseInt(newQuantity);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.getMessage();
+				try {
+					newQuantityValue = Integer.parseInt(newQuantity);
+
+					// Check if the new quantity is a non-negative value
+					if (newQuantityValue <= 0) {
+						// Display an error message
+						request.setAttribute("errorMessage", "Số lượng không hợp lệ!");
+						getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);
+						return; // Stop further processing
+					}
+				} catch (NumberFormatException e) {
+					// Handle the case where the new quantity is not a valid integer
+					request.setAttribute("errorMessage", "Invalid quantity format");
+					getServletContext().getRequestDispatcher("/product/cart.jsp").forward(request, response);
+					return; // Stop further processing
 				}
+
+				// Continue with the rest of the update logic
+				Map<String, BillProduct> mapCart = (Map<String, BillProduct>) obj;
+				BillProduct billProduct = mapCart.get(maSP);
+
+				// Update the quantity and total only if the new quantity is valid
+				totalP = newQuantityValue;
 				totalMoney = billProduct.getPrice() * totalP;
 
 				billProduct.setQuantity(totalP);
 				billProduct.setTotal(totalMoney);
+
+				// Calculate the new total for the entire cart
+				total = 0;
 				for (BillProduct b : mapCart.values()) {
-					total+= b.getTotal();
+					total += b.getTotal();
 				}
+
 				sizeCart = mapCart.size();
 				session.setAttribute("cart", mapCart);
 				session.setAttribute("total", total);

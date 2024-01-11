@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class Manage extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String loai = request.getParameter("loai");
@@ -40,43 +43,80 @@ public class Manage extends HttpServlet {
             String indexString = request.getParameter("index");
             HttpSession session = request.getSession();
             User tk = (User) session.getAttribute("userLogin");
+
             if (indexString == null) {
                 indexString = "1";
             }
+
             if(loai.equals("oder")) {
+                AccountDAO acc = new AccountDAO();
+                String id = request.getParameter("idOrder");
+
                 OrderDAO dhDAO = new OrderDAO();
                 List<OrderProduct> listOrder = new ArrayList<>();
-                Map<String, OrderProduct> dsDonHang = dhDAO.mapDonHang;
+                Map<String, OrderProduct> dsDonHang = dhDAO.loadData();
                 RSAKey rsa = new RSAKey();
-                for (OrderProduct od: dsDonHang.values()) {
-                    //kiem tra chu ky
+                DetailOrderDAO detailOrderDAO = new DetailOrderDAO();
+
+
+                for (OrderProduct od : dsDonHang.values()) {
+                    String pub = acc.getTimePublicKey(od.getNameAcc());
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    LocalDateTime newKeyTime = LocalDateTime.parse(pub, format);
+
+                    OrderProduct exist = dsDonHang.get(od.getNameAcc());
+//                    if (exist == null){
+//                        request.getRequestDispatcher("/admin/ManageOder.jsp").forward(request, response);
+//                        return;
+//                    }
+
                     System.out.println(od.toString());
                     Keys puk = AccountDAO.getKeyByUser(od.getNameAcc());
-                    List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
-                    try {
-                        //goi ham verify kiem tra lay dl ký dh tao chu ky moi và lay du lieu da ky trong db chu ky cũ
-                        // của ng dung có trùng khong
-                        boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
-                        //khac nhau thì cap nhat status=-1 vafgoi ham update db
-                        if(!check){
+                    if (puk != null) {
+                        List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
+                        if(!od.getStatus().equals("2"))
+                            try {
+                                boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
+
+                                if (!check) {
+                                    if (exist != null && (exist.getStatus().equals("0") || exist.getStatus().equals("1"))){
+                                        LocalDateTime orderCreate = LocalDateTime.parse(exist.getDateOrder(), format);
+                                        if (orderCreate.isBefore(newKeyTime)){
+                                            return;
+                                        }
+                                        else {
+                                            od.setStatus("-1");
+                                            new OrderDAO().edit(od.getIdOrder(), od);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             od.setStatus("-1");
                             new OrderDAO().edit(od.getIdOrder(), od);
                         }
-                    }catch (Exception e){
-                        od.setStatus("-1");
-                        new OrderDAO().edit(od.getIdOrder(), od);
-                    }
-                    // end
-                    listOrder.add(od);
-                }
-                request.setAttribute("dsDonHang", listOrder);
-                request.getRequestDispatcher("/admin/ManageOder.jsp").forward(request, response);
 
+                        listOrder.add(od);
+                    }
+                }
+
+                request.setAttribute("dsDonHang", listOrder);
+                System.out.println("**************************");
+
+                for (OrderProduct tmp: listOrder
+                ) {
+                    System.out.println(tmp.toString());
+
+                }
+                System.out.println("**************************");
+
+                request.getRequestDispatcher("/admin/ManageOder.jsp").forward(request, response);
             }
+
             if(loai.equals("product")) {
                 Load load = new Load();
                 int count = load.getAllProduct().size();
-                request.setAttribute("listSP",load.getAllProduct());
+                request.setAttribute("listSP", load.getAllProduct());
                 request.getRequestDispatcher("/admin/ManageProduct.jsp").forward(request, response);
             } else if (loai.equals("user")) {
                 AccountDAO accDAO = new AccountDAO();
@@ -91,12 +131,11 @@ public class Manage extends HttpServlet {
 
                 request.getRequestDispatcher("/admin/manageUser.jsp").forward(request, response);
             }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Xử lý ngoại lệ theo yêu cầu của bạn
         }
+    }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

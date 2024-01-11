@@ -73,23 +73,18 @@ public class Key extends HttpServlet {
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("<div style=\"font-size:16px;color:black;\">");
-                    sb.append("<p style=\"font-size:24px;\">Tải private key và public key</p>");
-                    sb.append("<span>Xin chào </span>").append("<br><br>");
-                    sb.append("<span>Đây là private key và public key của bạn: </span>").append("<br>");
+                    sb.append("<p style=\"font-size:24px;\">Tải private key</p>");
+                    sb.append("<span>Xin chào </span>" + tk.getFullName()).append("<br><br>");
+                    sb.append("<span>Đây là private key của bạn: </span>").append("<br>");
 
                     // Đính kèm private key vào email
                     MimeBodyPart attachmentPart = new MimeBodyPart();
                     attachmentPart.setDataHandler(new DataHandler(new FileDataSource(privateFile)));
                     attachmentPart.setFileName(privateFile);
 
-                    MimeBodyPart attachmentPart1 = new MimeBodyPart();
-                    attachmentPart1.setDataHandler(new DataHandler(new FileDataSource(publicFile)));
-                    attachmentPart1.setFileName(publicFile);
-
                     // Tạo đối tượng MimeMultipart để kết hợp văn bản và file đính kèm
                     Multipart multipart = new MimeMultipart();
                     multipart.addBodyPart(attachmentPart);
-                    multipart.addBodyPart(attachmentPart1);
 
                     // Thêm nội dung văn bản vào email
                     MimeBodyPart textPart = new MimeBodyPart();
@@ -102,7 +97,12 @@ public class Key extends HttpServlet {
                     SendEmail.sendEmail(email);
 
                     Keys key = new Keys(tk.getUname(), publicKey, time, 1);
-                    acc.addKeyNew(key, tk.getUname());
+                    if (acc.checkKey(tk.getUname())) {
+                        acc.updateStatusKey(tk.getUname());
+                        acc.addKeyNew(key, tk.getUname());
+                    } else {
+                        acc.addKeyNew(key, tk.getUname());
+                    }
                 } catch(Exception e){
                     e.printStackTrace();
                 }

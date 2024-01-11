@@ -32,7 +32,7 @@ public class DetailUser extends HttpServlet {
             // Kiểm tra xem tk có null hay không
             if (tk != null) {
                 OrderDAO dhDAO = new OrderDAO();
-                List<OrderProduct> dh = dhDAO.top5DonHang(tk.getFullName());
+                List<OrderProduct> dh = dhDAO.top5DonHang(tk.getUname());
                 request.setAttribute("donHang", dh);
                 System.out.println("Đơn hàng : " + dh);
 

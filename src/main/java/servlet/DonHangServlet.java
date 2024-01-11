@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +38,17 @@ public class DonHangServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
+			response.setContentType("text/html;charset=UTF-8");
+			request.setCharacterEncoding("UTF-8");
 			HttpSession session = request.getSession();
 			User tk = (User) session.getAttribute("user");
 			System.out.println(tk.toString());
 
 			Keys puk = AccountDAO.getKeyByUser(tk.getUname());
+			List<Keys> puk0 = AccountDAO.getKey0ByUser(tk.getUname());
 			System.out.println(puk.toString());
+
+			OrderDAO orderDAO = new OrderDAO();
 
 			RSAKey rsa = new RSAKey();
 			String fName= request.getParameter("Firstname");
@@ -52,13 +59,14 @@ public class DonHangServlet extends HttpServlet {
 			String addressOder = request.getParameter("addressOder");
 			String addressDetail = request.getParameter("address-details");
 			String privateKey = request.getParameter("prikey");
+			AccountDAO acc = new AccountDAO();
+			String pub = acc.getTimePublicKey(tk.getUname());
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime newKeyTime = LocalDateTime.parse(pub, format);
 
-			//goi pthuc areKeyPairsMatching kiem tra privatekey voi pulickey
+			// goi pthuc areKeyPairsMatching kiem tra privatekey voi pulickey
 			// co phai cung 1 bo khoa khong
 
-			if(puk !=null && !rsa.areKeyPairsMatching(privateKey,puk.getPublicKey())){
-				response.getWriter().println("Private key không hợp lệ");
-			}
 			addressOder = addressDetail + ","+ addressOder;
 			Map<String, BillProduct> ds = (Map<String, BillProduct>) session.getAttribute("cart");
 			double tong = (double) session.getAttribute("fullPrice");
@@ -67,7 +75,8 @@ public class DonHangServlet extends HttpServlet {
 			if(fName==null) fName = tk.getUname();
 			if(telephone==null) telephone = tk.getPhone();
 
-			String date = String.valueOf(java.time.LocalDate.now());
+			LocalDateTime date = LocalDateTime.now();
+			String dateTime = date.format(format);
 
 			List<DetailOrder> dos = new ArrayList<>();
 			for (BillProduct product : ds.values()) {
@@ -76,7 +85,24 @@ public class DonHangServlet extends HttpServlet {
 				dos.add(ds_dh);
 				new DetailOrderDAO().add(ds_dh);
 			}
-			OrderProduct dh = new OrderProduct(id, tk.getFullName(), date,dateDeliveryOder, tongS, telephone, fName, addressOder, note,"0", "0","");
+
+			OrderProduct dh = new OrderProduct();
+
+			if(puk !=null && !rsa.areKeyPairsMatching(privateKey,puk.getPublicKey())){
+				response.getWriter().println("Private key không hợp lệ");
+			}
+			for (Keys pubs : puk0) {
+				int row = acc.countStatus0(tk.getUname());
+				for (int i = 0; i < row; i++) {
+					if (date.isAfter(newKeyTime) && rsa.areKeyPairsMatching(privateKey, pubs.getPublicKey())) {
+						dh = new OrderProduct(id, tk.getUname(), dateTime, dateDeliveryOder, tongS, telephone, fName, addressOder, note, "0", "-2", "");
+						response.getWriter().println("Đơn hàng không được xác nhận do ký bằng private cũ");
+					}
+				}
+			}
+			if (date.isAfter(newKeyTime) && rsa.areKeyPairsMatching(privateKey, puk.getPublicKey())) {
+				dh = new OrderProduct(id, tk.getUname(), dateTime, dateDeliveryOder, tongS, telephone, fName, addressOder, note, "0", "0", "");
+			}
 			// Thêm đoạn mã xử lý trạng thái thanh toán
 			String paymentMethod = request.getParameter("paymentMethod");
 			if (paymentMethod != null && !paymentMethod.isEmpty()) {
@@ -86,7 +112,6 @@ public class DonHangServlet extends HttpServlet {
 			int checkoutInt = "online".equals(paymentMethod) ? 1 : 0;
 			dh.setCheckout(String.valueOf(checkoutInt));
 			// Cập nhật trạng thái thanh toán trong CSDL
-			OrderDAO orderDAO = new OrderDAO();
 //			orderDAO.add(dh);
 
 			//goi getDataInitSignature lấy du lieu dẻ tao ký
@@ -94,7 +119,10 @@ public class DonHangServlet extends HttpServlet {
 			//goi ham sign tao ký va luu vao database
 			String ck = new RSAKey().sign(dataInitSignature, privateKey);
 			dh.setSignature(ck);
-			new OrderDAO().add(dh);
+
+			orderDAO.add(dh);
+			System.out.println(dh);
+
 			session.removeAttribute("sizeCart");
 			session.removeAttribute("cart");
 			request.getRequestDispatcher("/ProductServlet").forward(request, response);
@@ -102,7 +130,6 @@ public class DonHangServlet extends HttpServlet {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
-
 
 	}
 

@@ -3,6 +3,7 @@ package conn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.sql.*;
 
@@ -16,7 +17,7 @@ public class OrderDAO implements ObjectDAO {
 	public OrderDAO() {
 		// TODO Auto-generated constructor stub
 	}
-	private static Map<String, OrderProduct> loadData(){
+	public static Map<String, OrderProduct> loadData(){
 		Map<String, OrderProduct> mapTemp = new HashMap<String, OrderProduct>();
 		try {
 			String query = "select * from OrderProduct";
@@ -58,7 +59,7 @@ public class OrderDAO implements ObjectDAO {
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,sp.getIdOrder());
 			ppstm.setString(2,sp.getNameAcc());
-			ppstm.setString(3,sp.getDateOrder());
+			ppstm.setString(3, sp.getDateOrder());
 			ppstm.setString(4,sp.getDateDelivery());
 			ppstm.setString(5,sp.getTotalMoney());
 			ppstm.setString(6,sp.getPhone());
@@ -77,6 +78,31 @@ public class OrderDAO implements ObjectDAO {
 		}
 		return false;
 	}
+	public boolean cancel(String id ){
+		OrderProduct on = mapDonHang.get(id);
+		on.setStatus("2");
+		mapDonHang.replace(id, on);
+		try {
+			String sql = "update OrderProduct set status=? where idOrder=?";
+			Connection connect = new Connect().getconnecttion();
+			PreparedStatement ppstm = connect.prepareStatement(sql);
+			ppstm.setInt(1,2);
+			ppstm.setString(2,id);
+
+
+			System.out.println(ppstm.toString() + "------");
+
+			ppstm.executeUpdate();
+			return true;
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
 	@Override
 	public boolean edit(String id, Object obj) {
 		OrderProduct donHang = (OrderProduct) obj;
@@ -84,11 +110,10 @@ public class OrderDAO implements ObjectDAO {
 		try {
 			String sql = "update OrderProduct set nameAcc=?,dateOrder=?,dateDelivery=?,totalMoney=?,phone=?," +
 					"nameRecipient=?,address=?,note=?, checkout=?,status=?, signature=? where idOrder=?";
-
 			Connection connect = new Connect().getconnecttion();
 			PreparedStatement ppstm = connect.prepareStatement(sql);
 			ppstm.setString(1,donHang.getNameAcc());
-			ppstm.setString(2,donHang.getDateOrder());
+			ppstm.setString(2, donHang.getDateOrder());
 			ppstm.setString(3,donHang.getDateDelivery());
 			ppstm.setString(4,donHang.getTotalMoney());
 			ppstm.setString(5,donHang.getPhone());
@@ -99,6 +124,9 @@ public class OrderDAO implements ObjectDAO {
 			ppstm.setString(10,donHang.getStatus());
 			ppstm.setString(11,donHang.getSignature());
 			ppstm.setString(12,donHang.getIdOrder());
+
+			System.out.println(ppstm.toString() + "------");
+
 			ppstm.executeUpdate();
 			return true;
 
@@ -157,105 +185,7 @@ public class OrderDAO implements ObjectDAO {
 		}
 		return null;
 	}
-	public List<OrderProduct> searchByAttribute(int index, int size, String txtSearch){
-		try {
-			Connection connect = new Connect().getconnecttion();
-			ResultSet rs = null;
-			PreparedStatement ppstm;
-			List<OrderProduct> list = new ArrayList<OrderProduct>();
-			String query="";
-			if(txtSearch==null) {
-				query = "with x as (select *, ROW_NUMBER() over (order by nameAcc ASC ) as r from OrderProduct)\r\n"
-						+ "select * from x where r between ?*?-(?-1) and ?*?";
-				ppstm = connect.prepareStatement(query);
-				ppstm.setInt(1, index);
-				ppstm.setInt(2, size);
-				ppstm.setInt(3, size);
-				ppstm.setInt(4, index);
-				ppstm.setInt(5, size);
-			}else {
-				query = "with x as (select *,  ROW_NUMBER() over (order by nameAcc ASC ) as r from OrderProduct where nameAcc like ?)\r\n"
-						+ "select * from x where r between ?*?-(?-1) and ?*?";
-				ppstm = connect.prepareStatement(query);
-				ppstm.setString(1, "%"+txtSearch+"%");
-				ppstm.setInt(2, index);
-				ppstm.setInt(3, size);
-				ppstm.setInt(4, size);
-				ppstm.setInt(5, index);
-				ppstm.setInt(6, size);
-			}
-			rs= ppstm.executeQuery();
-			while(rs.next()) {
-				OrderProduct dh = new OrderProduct(rs.getString(1),
-						rs.getString(2),
-						rs.getString(3),
-						rs.getString(4),
-						rs.getString(5),
-						rs.getString(6),
-						rs.getString(7),
-						rs.getString(8),
-						rs.getString(9),
-						rs.getString(10),
-						rs.getString(11),
-						rs.getString(12));
 
-				list.add(dh);
-			}
-			return list;
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return null;
-
-	}
-	public String maxMaDH() {
-		try {
-			String query = "select MAX(MaDH)  from OrderProduct";
-			Connection connect = new Connect().getconnecttion();
-			PreparedStatement ppstm = connect.prepareStatement(query);
-			ResultSet rs = null;
-			rs =ppstm.executeQuery();
-			String max= "";
-			while(rs.next()) {
-				max = rs.getString(1);
-			}
-			return max;
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return null;
-	}
-	public String getRevenueStats(){
-		Map<String,Integer> map = new LinkedHashMap<>();
-		String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-		try {
-			String sql = "SELECT YEAR(dateOrder) as year, MONTH(dateOrder) as month, SUM(totalMoney) as total_revenue\n" +
-					"FROM OrderProduct\n" +
-					"GROUP BY YEAR(dateOrder), MONTH(dateOrder) order by MONTH(dateOrder)";
-			Connection connect = new Connect().getconnecttion();
-			PreparedStatement ppstm = connect.prepareStatement(sql);
-			ResultSet rss = null;
-			rss =ppstm.executeQuery();
-
-			while(rss.next()) {
-
-				int	month = rss.getInt(2);
-				// Chuyển đổi số tháng sang tên tiếng Anh
-				String monthName = monthNames[month - 1];
-				System.out.println(monthName);
-				int 	total = rss.getInt(3);
-
-				map.put(monthName,total);
-			}
-			Gson gson = new Gson();
-			String rs = gson.toJson(map);
-
-			return rs;
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return null;
-	}
 	public int  getOrderNotProcessed(){
 		int numOrderNoProcessed = 0;
 		for(OrderProduct o : mapDonHang.values()){
