@@ -79,10 +79,6 @@ public class Manage extends HttpServlet {
                         String publicKeyBase64 = keys.getPublicKey();
                         publicKeyList.add(publicKeyBase64);
                     }
-                    for (OrderProduct or : exist) {
-                        String status = or.getStatus();
-                        String dateO = or.getDateOrder();
-                        System.out.println("or: " + or);
 
                         if (puk != null && puk0 != null) {
                             List<DetailOrder> detailOders = detailOrderDAO.dsDHByMaDH(od.getIdOrder());
@@ -95,32 +91,10 @@ public class Manage extends HttpServlet {
                                     boolean check1 = rsa.verifyListPubKey(od.getDataInitSignature(detailOders), od.getSignature(), publicKeyList);
                                     System.out.println("check1: " + check1);
 
-                                    if (or != null && (status.equals("0") || status.equals("1"))) {
+                                    if (od != null && (od.getStatus().equals("0") || od.getStatus().equals("1") || od.getStatus().equals("-2"))) {
                                         System.out.println("Nga");
-                                        LocalDateTime orderCreate = LocalDateTime.parse(dateO, format);
+                                        LocalDateTime orderCreate = LocalDateTime.parse(od.getDateOrder(), format);
                                         System.out.println("Ngày tạo đơn: " + orderCreate);
-                                        if (orderCreate.isBefore(newKeyTime)) {
-                                            if (!check1) {
-                                                od.setStatus("-1");
-                                                new OrderDAO().edit(od.getIdOrder(), od);
-                                                System.out.println("haha");
-                                            } else if ("1".equals(od.getStatus())) {
-                                                // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
-                                                // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
-
-                                                od.setStatus("1");
-                                                new OrderDAO().edit(od.getIdOrder(), od);
-                                                System.out.println("hihi");
-                                            } else if (!check1 && "1".equals(od.getStatus())) {
-                                                od.setStatus("3");
-                                                new OrderDAO().edit(od.getIdOrder(), od);
-                                                System.out.println("Tố Nga");
-                                            } else {
-//                                                listOrder.add(od);
-                                                continue;
-                                            }
-
-                                        }
                                         if (orderCreate.isAfter(newKeyTime)) {
                                             if (!check) {
                                                 od.setStatus("-1");
@@ -139,10 +113,32 @@ public class Manage extends HttpServlet {
                                                 new OrderDAO().edit(od.getIdOrder(), od);
                                                 System.out.println("haha3");
                                             }
-//                                            if (check){
-//                                                listOrder.add(od);
-//                                                continue;
-//                                            }
+                                            if (check){
+                                                listOrder.add(od);
+                                                continue;
+                                            }
+                                        }
+                                        if (orderCreate.isBefore(newKeyTime)) {
+                                            if (!check1) {
+                                                od.setStatus("-1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("haha");
+                                            } else if ("1".equals(od.getStatus())) {
+                                                // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
+                                                // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
+
+                                                od.setStatus("1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("hihi");
+                                            } else if (!check1 && "1".equals(od.getStatus())) {
+                                                od.setStatus("3");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("Tố Nga");
+                                            } else {
+                                                listOrder.add(od);
+                                                continue;
+                                            }
+
                                         }
                                     }
                                 }catch (Exception e) {
@@ -153,7 +149,6 @@ public class Manage extends HttpServlet {
                                 }
                             }
                         }
-                    }
 
                     listOrder.add(od);
                 }
