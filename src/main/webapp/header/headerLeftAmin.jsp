@@ -64,7 +64,6 @@
                 <a class="collapse-item" href="<c:url value="/admin/manage?loai=user"></c:url>">Người dùng</a>
                 <a class="collapse-item" href="<c:url value="/admin/manage?loai=oder"></c:url>">Đơn hàng</a>
                 <a class="collapse-item" href="<c:url value="/admin/manage?loai=product"></c:url>">Sản phẩm</a>
-                <a class="collapse-item" href="<c:url value="/admin/manage?loai=log"></c:url>">Nhật ký</a>
             </div>
         </div>
     </li>

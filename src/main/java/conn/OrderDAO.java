@@ -244,6 +244,50 @@ public class OrderDAO implements ObjectDAO {
 		}
 		return 0;
 	}
+	public List<OrderProduct> getOrderByUser(String userName) {
+		List<OrderProduct> list = new ArrayList<>();
+
+		try (
+				Connection connect = new Connect().getconnecttion();
+
+				PreparedStatement preparedStatement = connect.prepareStatement("SELECT * FROM orderproduct  WHERE nameAcc = ?");
+		) {
+			preparedStatement.setString(1, userName);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					OrderProduct order = new OrderProduct(
+							resultSet.getString("idOrder"),
+							resultSet.getString("nameAcc"),
+							resultSet.getString("dateOrder"),
+							resultSet.getString("dateDelivery"),
+							resultSet.getString("totalMoney"),
+							resultSet.getString("phone"),
+							resultSet.getString("nameRecipient"),
+							resultSet.getString("address"),
+							resultSet.getString("note"),
+							resultSet.getString("checkout"),
+							resultSet.getString("status"),
+							resultSet.getString("signature")
+					);
+					list.add(order);
+					// Điền các trường khác tương ứng
+					System.out.println("TIM THẤY " + userName);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// Xử lý ngoại lệ nếu cần
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+
+		if (list == null) {
+			System.out.println("Không tìm thấy đơn hàng cho người dùng: " + userName);
+		}
+
+		return list;
+	}
+
 	public static void main(String[] args) {
 		OrderDAO dh = new OrderDAO();
 
