@@ -43,7 +43,6 @@ public class Manage extends HttpServlet {
             String indexString = request.getParameter("index");
             HttpSession session = request.getSession();
             User tk = (User) session.getAttribute("userLogin");
-
             if (indexString == null) {
                 indexString = "1";
             }
@@ -57,63 +56,113 @@ public class Manage extends HttpServlet {
                 Map<String, OrderProduct> dsDonHang = dhDAO.loadData();
                 RSAKey rsa = new RSAKey();
                 DetailOrderDAO detailOrderDAO = new DetailOrderDAO();
+                List<OrderProduct> exist = new ArrayList<>();
 
                 for (OrderProduct od : dsDonHang.values()) {
                     String pub = acc.getTimePublicKey(od.getNameAcc());
+                    System.out.println("pub:" + pub);
                     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     LocalDateTime newKeyTime = LocalDateTime.parse(pub, format);
+                    System.out.println("newKeyTime: " + newKeyTime);
 
-                    OrderProduct exist = dsDonHang.get(od.getNameAcc());
-//                    if (exist == null){
-//                        request.getRequestDispatcher("/admin/ManageOder.jsp").forward(request, response);
-//                        return;
-//                    }
+                    exist = dhDAO.getOrderByUser(od.getNameAcc());
+                    System.out.println("exist Acc:" + exist);
 
                     System.out.println(od.toString());
                     Keys puk = AccountDAO.getKeyByUser(od.getNameAcc());
-                    if (puk != null) {
-                        List<DetailOrder> detailOders = new DetailOrderDAO().dsDHByMaDH(od.getIdOrder());
-                        if (!od.getStatus().equals("2") && !od.getStatus().equals("3") ) {
-                            System.out.println("Inside if block");
-                            try {
-                                boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
+                    System.out.println("puk:" + puk);
+                    List<Keys> puk0 = AccountDAO.getKey0ByUser(od.getNameAcc());
+                    System.out.println("puk0:" + puk0);
+                    List<String> publicKeyList = new ArrayList<>();
 
-                                if (!check) {
-                                    od.setStatus("-1");
-                                    new OrderDAO().edit(od.getIdOrder(), od);
-                                } else if ("1".equals(od.getStatus())) {
-                                    // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
-                                    // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
-
-                                    od.setStatus("1");
-                                    new OrderDAO().edit(od.getIdOrder(), od);
-                                }
-                                if(!check && "1".equals(od.getStatus())){
-                                    od.setStatus("-1");
-                                    new OrderDAO().edit(od.getIdOrder(), od);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                od.setStatus("-1");
-                                new OrderDAO().edit(od.getIdOrder(), od);
-                            }
-                        } else if ("1".equals(od.getStatus())) {
-                            // Trong trường hợp ấn nút "Hủy", thực hiện chuyển trạng thái từ '1' sang '3'
-                            od.setStatus("3");
-                            new OrderDAO().edit(od.getIdOrder(), od);
-                        }
-
-                        listOrder.add(od);
+                    for (Keys keys : puk0) {
+                        String publicKeyBase64 = keys.getPublicKey();
+                        publicKeyList.add(publicKeyBase64);
                     }
+                    for (OrderProduct or : exist) {
+                        String status = or.getStatus();
+                        String dateO = or.getDateOrder();
+                        System.out.println("or: " + or);
+
+                        if (puk != null && puk0 != null) {
+                            List<DetailOrder> detailOders = detailOrderDAO.dsDHByMaDH(od.getIdOrder());
+                            System.out.println("Chi tiết:" + detailOders);
+                            if (!od.getStatus().equals("2") && !od.getStatus().equals("3")) {
+                                System.out.println("Hậu");
+                                try {
+                                    boolean check = rsa.verify(od.getDataInitSignature(detailOders), od.getSignature(), puk.getPublicKey());
+                                    System.out.println("check: " + check);
+                                    boolean check1 = rsa.verifyListPubKey(od.getDataInitSignature(detailOders), od.getSignature(), publicKeyList);
+                                    System.out.println("check1: " + check1);
+
+                                    if (or != null && (status.equals("0") || status.equals("1"))) {
+                                        System.out.println("Nga");
+                                        LocalDateTime orderCreate = LocalDateTime.parse(dateO, format);
+                                        System.out.println("Ngày tạo đơn: " + orderCreate);
+                                        if (orderCreate.isBefore(newKeyTime)) {
+                                            if (!check1) {
+                                                od.setStatus("-1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("haha");
+                                            } else if ("1".equals(od.getStatus())) {
+                                                // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
+                                                // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
+
+                                                od.setStatus("1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("hihi");
+                                            } else if (!check1 && "1".equals(od.getStatus())) {
+                                                od.setStatus("3");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("Tố Nga");
+                                            } else {
+//                                                listOrder.add(od);
+                                                continue;
+                                            }
+
+                                        }
+                                        if (orderCreate.isAfter(newKeyTime)) {
+                                            if (!check) {
+                                                od.setStatus("-1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("haha1");
+                                            } else if ("1".equals(od.getStatus())) {
+                                                // Trong trường hợp ấn nút "Duyệt", giữ nguyên trạng thái là '1'
+                                                // và cập nhật trạng thái trong cơ sở dữ liệu nếu kiểm tra thành công
+
+                                                od.setStatus("1");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("haha2");
+                                            }
+                                            if (!check && "1".equals(od.getStatus())) {
+                                                od.setStatus("3");
+                                                new OrderDAO().edit(od.getIdOrder(), od);
+                                                System.out.println("haha3");
+                                            }
+//                                            if (check){
+//                                                listOrder.add(od);
+//                                                continue;
+//                                            }
+                                        }
+                                    }
+                                }catch (Exception e) {
+                                    e.printStackTrace();
+                                    od.setStatus("-1");
+                                    new OrderDAO().edit(od.getIdOrder(), od);
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+                        }
+                    }
+
+                    listOrder.add(od);
                 }
 
                 request.setAttribute("dsDonHang", listOrder);
                 System.out.println("**************************");
 
-                for (OrderProduct tmp: listOrder
-
-                     ) {
-                  
+                for (OrderProduct tmp : listOrder
+                ) {
                     System.out.println(tmp.toString());
 
                 }

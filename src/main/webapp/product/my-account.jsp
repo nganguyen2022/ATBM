@@ -181,7 +181,7 @@
                                             </div>
                                             <div class="d111 col-md-8 "
                                                  style="border-left: rgb(255, 255, 255) 10px solid ;">
-                                                <h6>Địa chỉ đặt hàng <span class="sp111"></span></h6>
+                                                <h6>Thông tin đặt hàng <span class="sp111"></span></h6>
                                                 <p>${sessionScope.user.uname}</p>
                                                 <p>${sessionScope.user.phone}</p>
                                                 <p>${sessionScope.user.address}</p>
@@ -209,7 +209,7 @@
                                                         <td>${dh.dateOrder}</td>
                                                         <c:set var="duyet" value="${dh.status}"></c:set>
                                                         <c:if test="${duyet == '1' }">
-                                                            <td>Đang vận chuyển</td>
+                                                            <td>Đã được duyệt</td>
                                                             <td>${dh.totalMoney}00 đ</td>
                                                             <td><a href="/product/DetailOder?maDH=${dh.idOrder}" class="view">
                                                                 Theo dõi</a></td>
@@ -218,7 +218,7 @@
                                                         </c:if>
                                                         <c:if test="${duyet == '0' }">
                                                             <td>Chưa được duyệt</td>
-                                                            <td>${dh.totalMoney}00 đ</td>
+                                                            <td>${dh.totalMoney}00 VNĐ</td>
                                                             <td><a href="/product/DetailOder?maDH=${dh.idOrder}" class="view">
                                                                 Theo dõi</a></td>
                                                             <td><a href="/product/DetailOder?maDH=${dh.idOrder}" class="view">
@@ -226,11 +226,19 @@
                                                         </c:if>
                                                         <c:if test="${duyet == '-2' }">
                                                             <td>Đơn hàng không được xác nhận</td>
-                                                            <td>${dh.totalMoney}00 đ</td>
+                                                            <td>${dh.totalMoney}00 VNĐ</td>
                                                         </c:if>
                                                         <c:if test="${duyet == '-1' }">
                                                             <td>Đơn hàng đã bị chỉnh sửa và chờ hủy</td>
-                                                            <td>${dh.totalMoney}00 đ</td>
+                                                            <td>${dh.totalMoney}00 VNĐ</td>
+                                                        </c:if>
+                                                        <c:if test="${duyet == '2' }">
+                                                            <td>Đơn hàng bị hủy</td>
+                                                            <td>${dh.totalMoney}00 VNĐ</td>
+                                                        </c:if>
+                                                        <c:if test="${duyet == '3' }">
+                                                            <td>Đơn hàng bị hủy và hoàn tiền</td>
+                                                            <td>${dh.totalMoney}00 VNĐ</td>
                                                         </c:if>
 
                                                     </tr>
@@ -282,10 +290,10 @@
                                             <form action="Key" method="post">
                                                 <div class="button-box" style="padding-top: 20px;">
                                                     <c:if test="<%= checkKey %>">
-                                                    <button class="btn default-btn" id="btn_edit_111" type="button" onclick="createNewKey()">Tạo key mới</button>
+                                                    <button class="btn default-btn" id="btn_edit_111" type="button" onclick="createNewKey()">Tạo khóa mới</button>
                                                     </c:if>
                                                     <c:if test="<%= !checkKey %>">
-                                                        <button class="btn default-btn" id="btn_edit_111" type="button" onclick="createNewKey()">Tạo key</button>
+                                                        <button class="btn default-btn" id="btn_edit_111" type="button" onclick="createNewKey()">Tạo khóa</button>
                                                     </c:if>
                                                 </div>
                                             </form>
@@ -322,6 +330,9 @@
                                                         </c:if>
                                                         <c:if test="${duyet == '2' }">
                                                             <td>Đã hủy</td>
+                                                        </c:if>
+                                                        <c:if test="${duyet == '3' }">
+                                                            <td>Đã hủy và hoàn tiền</td>
                                                         </c:if>
                                                         <c:if test="${duyet == '-1' }">
                                                             <td>Đã bị chỉnh sửa và chờ hủy</td>

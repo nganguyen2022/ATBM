@@ -112,25 +112,23 @@
                                             <p class="text-danger">${errorMessage}</p>
                                             <tr>
                                                 <td class="plantmore-product-thumbnail thumbnail"><a href="<c:url value="/DetailServlet?maSP=${item.value.idP}"></c:url>"><img
-
-                                                            src="${item.value.nameImage}" alt=""></a></td>
-
+                                                        src="${item.value.nameImage}" alt=""></a></td>
                                                 <td class="plantmore-product-name"><a href="<c:url value="/DetailServlet?maSP=${item.value.idP}"></c:url>">${item.value.nameP}</a></td>
                                                 <td class="plantmore-product-price"><span class="amount">${item.value.price}00
-                                                        ₫</span></td>
+                                                        VNĐ</span></td>
                                                 <td class="plantmore-product-quantity">
-                                                <form method="post" action="<c:url value="/product/CartServlet?maSP=${item.value.idP}&action=Update"></c:url>">
-                                                	<input name="quantity" value="${item.value.quantity}" type="number">
-                                                	<button type="submit">Cập nhật</button>
-                                                </form>
-                                                    
+                                                    <form method="post" action="<c:url value="/product/CartServlet?maSP=${item.value.idP}&action=Update"></c:url>">
+                                                        <input name="quantity" value="${item.value.quantity}" type="number">
+                                                        <button type="submit">Cập nhật</button>
+                                                    </form>
+
                                                 </td>
-                                                <td class="product-subtotal"><span class="amount">${item.value.total}00 ₫</span>
+                                                <td class="product-subtotal"><span class="amount">${item.value.total}00 VNĐ</span>
                                                 </td>
                                                 <td class="plantmore-product-remove"><a href="<c:url value="/product/CartServlet?maSP=${item.value.idP}&action=Xoa"></c:url>"><i
-                                                            class="fa fa-times"></i></a></td>  
+                                                        class="fa fa-times"></i></a></td>
                                             </tr>
-                                            </c:forEach>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -145,7 +143,7 @@
                                             <ul>
                                                 <div >
 <%--                                                <li><fmt:message key= "assets.Summs" bundle="${language}"></fmt:message> <span>--%>
-                                                    <p>Tổng tiền: <span id="totalMoney">${sessionScope.total}</span>00 ₫</p>
+                                                    <p>Tổng tiền: <span id="totalMoney">${sessionScope.total}</span>00 VNĐ</p>
 <%--    </span></li>--%>
                                                 </div>
                                             </ul>

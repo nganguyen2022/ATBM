@@ -3,6 +3,7 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
 
 public class RSAKey {
     private KeyPair keyPair;
@@ -60,6 +61,24 @@ public class RSAKey {
         signature.update(dataBytes);
         return signature.verify(signatureBytes);
     }
+
+    public boolean verifyListPubKey(String data, String sign, List<String> publicKeyBase64List) {
+        boolean isSignValid = false;
+
+        for (String publicKeyBase64 : publicKeyBase64List) {
+            try {
+                if (verify(data, sign, publicKeyBase64)) {
+                    isSignValid = true;
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Xử lý ngoại lệ theo ý bạn
+            }
+        }
+
+        return isSignValid;
+    }
+
     //tao chu ky
     public  String sign(String data, String privateKeyBase64) throws Exception {
         // Chuyển đổi chuỗi base64 của private key thành kiểu byte[]

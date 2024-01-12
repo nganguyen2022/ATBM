@@ -15,31 +15,31 @@ public class AccountDAO implements ObjectDAO{
     public AccountDAO() {
         // TODO Auto-generated constructor stub
     }
-//
-public static Keys getKeyByUser(String username){
-    try{
-        String query = "select * from userkeys where userID = ? AND key_status = 1";
-        Connection connect = new Connect().getconnecttion();
-        PreparedStatement stmt = connect.prepareStatement(query);
-        stmt.setString(1, username);
-        System.out.println(stmt.toString());
-        ResultSet rs= stmt.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt(1);
-            String user = rs.getString(2);
-            String pk = rs.getString(3);
-            String date = rs.getString(4);
-            int status = rs.getInt(5);
-            Keys key = new Keys(id,user,pk,date, status);
-            return key;
+    //
+    public static Keys getKeyByUser(String username){
+        try{
+            String query = "select * from userkeys where userID = ? AND key_status = 1";
+            Connection connect = new Connect().getconnecttion();
+            PreparedStatement stmt = connect.prepareStatement(query);
+            stmt.setString(1, username);
+            System.out.println(stmt.toString());
+            ResultSet rs= stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String user = rs.getString(2);
+                String pk = rs.getString(3);
+                String date = rs.getString(4);
+                int status = rs.getInt(5);
+                Keys key = new Keys(id,user,pk,date, status);
+                return key;
+            }
+            return null;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
         }
-        return null;
-    } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-        return null;
     }
-}
 
     public static List<Keys> getKey0ByUser(String username){
         List<Keys> keys = new ArrayList<>();
@@ -132,48 +132,48 @@ public static Keys getKeyByUser(String username){
 
     }
 
-public boolean add(Object obj, Object obj1) {
-    User tk = (User) obj;
-    Keys key = (Keys) obj1;
+    public boolean add(Object obj, Object obj1) {
+        User tk = (User) obj;
+        Keys key = (Keys) obj1;
 
-    String sqlInsertUser = "INSERT INTO USERS (fullname, userName, email, phone, address, upassword, isUser) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    String sqlInsertUserKey = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, ?)";
+        String sqlInsertUser = "INSERT INTO USERS (fullname, userName, email, phone, address, upassword, isUser) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsertUserKey = "INSERT INTO USERKEYS (userID, publicKey, date_time, key_status) VALUES (?, ?, ?, ?)";
 
-    try {
-        Connection connect = new Connect().getconnecttion();
-        connect.setAutoCommit(false); // Disable auto-commit
+        try {
+            Connection connect = new Connect().getconnecttion();
+            connect.setAutoCommit(false); // Disable auto-commit
 
-        // Insert into USERS table
-        try (PreparedStatement ppstmUser = connect.prepareStatement(sqlInsertUser)) {
-            ppstmUser.setString(1, tk.getFullName());
-            ppstmUser.setString(2, tk.getUname());
-            ppstmUser.setString(3, tk.getEmail());
-            ppstmUser.setString(4, tk.getPhone());
-            ppstmUser.setString(5, tk.getAddress());
-            ppstmUser.setString(6, tk.getPass());
-            ppstmUser.setInt(7, tk.getIsUser());
-            ppstmUser.executeUpdate();
+            // Insert into USERS table
+            try (PreparedStatement ppstmUser = connect.prepareStatement(sqlInsertUser)) {
+                ppstmUser.setString(1, tk.getFullName());
+                ppstmUser.setString(2, tk.getUname());
+                ppstmUser.setString(3, tk.getEmail());
+                ppstmUser.setString(4, tk.getPhone());
+                ppstmUser.setString(5, tk.getAddress());
+                ppstmUser.setString(6, tk.getPass());
+                ppstmUser.setInt(7, tk.getIsUser());
+                ppstmUser.executeUpdate();
+            }
+
+            // Insert into USERKEYS table
+            try (PreparedStatement ppstmUserKey = connect.prepareStatement(sqlInsertUserKey)) {
+                ppstmUserKey.setString(1, tk.getUname()); // Assuming username is used as userID
+                ppstmUserKey.setString(2, key.getPublicKey());
+                ppstmUserKey.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+                ppstmUserKey.setInt(4, 1); // Assuming 1 represents an active key
+                ppstmUserKey.executeUpdate();
+            }
+
+            connect.commit(); // Commit the transaction
+            connect.setAutoCommit(true); // Enable auto-commit again
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
-
-        // Insert into USERKEYS table
-        try (PreparedStatement ppstmUserKey = connect.prepareStatement(sqlInsertUserKey)) {
-            ppstmUserKey.setString(1, tk.getUname()); // Assuming username is used as userID
-            ppstmUserKey.setString(2, key.getPublicKey());
-            ppstmUserKey.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-            ppstmUserKey.setInt(4, 1); // Assuming 1 represents an active key
-            ppstmUserKey.executeUpdate();
-        }
-
-        connect.commit(); // Commit the transaction
-        connect.setAutoCommit(true); // Enable auto-commit again
-
-        return true;
-    } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println(e.getMessage());
+        return false;
     }
-    return false;
-}
 
 
     public boolean update(Object obj, Object obj1) {

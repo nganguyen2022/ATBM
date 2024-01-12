@@ -111,19 +111,19 @@
     <div class="row product__a">
       <c:forEach items="${listP }" var="p">
         <form action="/product/CartServlet?maSP=${p.pID}&action=Them" method="post">
-        <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-          <div class="featured__item">
-            <div class="featured__item__pic set-bg img_pro" data-setbg="${p.img }">
-            </div>
-            <div class="featured__item__text">
-              <h6>
-                <a class="namepro" style="white-space: nowrap" href="DetailServlet?pid=${p.pID }">${p.pName }</a>
-              </h6>
-              <h5 style="padding-left: 142px">${p.price }VNĐ</h5>
+          <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+            <div class="featured__item">
+              <div class="featured__item__pic set-bg img_pro" data-setbg="${p.img }">
+              </div>
+              <div class="featured__item__text">
+                <h6>
+                  <a class="namepro" style="white-space: nowrap" href="DetailServlet?pid=${p.pID }">${p.pName }</a>
+                </h6>
+                <h5 style="padding-left: 100px">${p.price }00VNĐ</h5>
                 <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">
+              </div>
             </div>
           </div>
-        </div>
         </form>
       </c:forEach>
     </div>

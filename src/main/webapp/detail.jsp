@@ -104,21 +104,21 @@
             <i class="fa fa-star-half-o"></i>
             <span>(18 reviews)</span>
           </div>
-          <div class="product__details__price">${detail.price }VNĐ</div>
-          <p>${detail.description }</p>
-          <div class="product__details__quantity">
-            <div class="quantity">
-              <div class="pro-qty">
-                <input type="text" value="1">
+          <form action="/product/CartServlet?maSP=${detail.pID}&action=Them" method="post">
+            <div class="product__details__price">${detail.price }00 VNĐ</div>
+            <p>${detail.description }</p>
+            <div class="product__details__quantity">
+              <div class="quantity">
+                <div class="pro-qty">
+                  <input type="number" value="1" min="1" name="quantity">
+                </div>
               </div>
             </div>
-          </div>
-          <form action="/product/CartServlet?maSP=${detail.pID}&action=Them" method="post">
+
             <input type="hidden" name="productCode"
                    value="<c:out value='${detail.pID}'/>">
-            <input class="primary-btn" type="submit" value="Thêm vào giỏ hàng">
+            <button class="primary-btn" type="submit">Thêm vào giỏ hàng</button>
           </form>
-          <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
         </div>
       </div>
     </div>
